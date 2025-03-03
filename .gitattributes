@@ -1,4 +1,5 @@
 *.html linguist-vendored
-src/*.css linguist-language=Typescript 
+*.css linguist-vendored
+*.Svelte linguist-vendored
 *.js linguist-language=Typescript 
 app-conf.json linguist-vendored
