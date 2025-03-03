@@ -1,0 +1,4 @@
+*.html linguist-vendored
+src/*.css linguist-language=Typescript 
+*.js linguist-language=Typescript 
+app-conf.json linguist-vendored
