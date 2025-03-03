@@ -100,12 +100,11 @@ impl<'se> Serialize for TranslationOpts<'se> {
 mod tests {
   #[test]
   fn test_deserializer() {
-    // Convert the JSON string back to a Point.
-
     use crate::TranslationOpts;
-    let deserialized: TranslationOpts<'_> = serde_json::from_str("{\"client\": \"gtx\", \"source_lang\": \"nl\", \"target_lang\": \"tr\", \"dst_target\": \"tr\",\"query\": \"ik ga hardlopen\"}").unwrap();
-    println!("object: {:?}", deserialized);
 
-    println!("{:?}", serde_json::to_string(&deserialized));
+    let deserialized: TranslationOpts<'_> = serde_json::from_str("{\"client\": \"gtx\", \"source_lang\": \"nl\", \"target_lang\": \"tr\", \"dst_target\": \"tr\",\"query\": \"ik ga hardlopen\"}").unwrap();
+    println!("deserialized: {:?}", deserialized);
+
+    println!("serialized: {:?}", serde_json::to_string(&deserialized));
   }
 }
