@@ -42,4 +42,4 @@ This project has no goal other than making an arbitrary app in Rust using Tauri.
 - ### Plugins
   - ``tauri-plugin-translator-bindings``
     > Our Tauri plugin providing bindings to ``gtranslate`` crate made by z3ntl3
-    > <br> [Source](https://github.com/Z3NTL3/gtranslate-app/tree/main/tauri-plugin-translator-bindings/src)
+    > <br> [Source](https://github.com/Z3NTL3/gtranslate-app/tree/main/plugins/tauri-plugin-translator-bindings/src)
