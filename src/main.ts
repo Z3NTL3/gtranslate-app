@@ -6,6 +6,7 @@ window.addEventListener("DOMContentLoaded", () => {
   getCurrentWindow().show();
 
   invoke('plugin:translator-bindings|translate', {
+    timeout: 5,
     translations_options: {
         source_lang: "nl",
         target_lang: "tr",

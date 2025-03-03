@@ -10,8 +10,6 @@ pub fn run() {
             let file = std::fs::File::open(&app_config)?;
 
             let config: tauri_plugin_translator_bindings::AppConfig = serde_json::from_reader(file)?; 
-            println!("config: {:?}", config);
-
             if config.use_proxy.is_some_and(|v| {
                 v == true
             }){
