@@ -1,0 +1,21 @@
+[package]
+name = "tauri-plugin-translator-bindings"
+version = "0.1.0"
+authors = [ "You" ]
+description = ""
+edition = "2021"
+rust-version = "1.77.2"
+exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
+links = "tauri-plugin-translator-bindings"
+
+[dependencies]
+tauri = { version = "2.3.0" }
+serde = "1.0"
+thiserror = "2"
+gtranslate = "0.1.1"
+reqwest = "0.12.12"
+serde_with = "3.12.0"
+tokio = "1.43.0"
+
+[build-dependencies]
+tauri-plugin = { version = "2.0.4", features = ["build"] }
