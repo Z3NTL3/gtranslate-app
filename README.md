@@ -25,7 +25,7 @@
 The difference between using Google Translator from your browser is that this app auto starts on boot, has a system tray and hotbind to quickly open up and do your translation duties in.
 
 #### Goals
-This project has no goal other than making an arbitrary app in Rust using Tauri.
+This project has no goal other than making an arbitrary app in Rust using Tauri, because it amuses me.
 
 #### Features
 - Keybinds to quickly open
