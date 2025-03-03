@@ -4,7 +4,7 @@ import { invoke } from "@tauri-apps/api/core";
 window.addEventListener("DOMContentLoaded", () => {
   getCurrentWindow().show();
 
-  invoke('translator-bindings:translations|translate', {
+  invoke('plugin:translator-bindings|translate', {
       source_lang: "nl",
       target_lang: "tr",
       query: "ik ga hardlopen"

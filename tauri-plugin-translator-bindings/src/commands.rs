@@ -1,7 +1,5 @@
 #![allow(unused)]
-use std::sync::Mutex;
 use std::time::Duration;
-
 use tauri::Manager;
 use tauri::{AppHandle, command, Runtime};
 
