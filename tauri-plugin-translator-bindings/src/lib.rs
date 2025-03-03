@@ -35,8 +35,8 @@ impl<R: Runtime, T: Manager<R>> crate::TranslatorBindingsExt<R> for T {
 
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-  Builder::new("translator-bindings")
-    // .invoke_handler(tauri::generate_handler![commands::translate])
+  Builder::<R>::new("translator-bindings")
+    .invoke_handler(tauri::generate_handler![commands::translate])
     .setup(|app, api| {
       #[cfg(mobile)]
       let translator_bindings = mobile::init(app, api)?;

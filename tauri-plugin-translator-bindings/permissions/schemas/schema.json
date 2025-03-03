@@ -295,6 +295,16 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the translate command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-translate"
+        },
+        {
+          "description": "Denies the translate command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-translate"
+        },
+        {
           "description": "Default permissions for the plugin",
           "type": "string",
           "const": "default"

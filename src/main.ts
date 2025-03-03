@@ -5,8 +5,10 @@ window.addEventListener("DOMContentLoaded", () => {
   getCurrentWindow().show();
 
   invoke('plugin:translator-bindings|translate', {
-      source_lang: "nl",
-      target_lang: "tr",
-      query: "ik ga hardlopen"
+    translations_options: {
+        source_lang: "nl",
+        target_lang: "tr",
+        query: "ik ga hardlopen"
+      }
   }).then(console.log).catch(console.error)
 });
