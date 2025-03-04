@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 pub const WINDOW_RETRIEVAL_FAILURE: &'static str = "window_retrieval_failure";
 
@@ -6,9 +6,9 @@ pub const WINDOW_RETRIEVAL_FAILURE: &'static str = "window_retrieval_failure";
 #[serde(rename_all = "PascalCase")]
 pub struct AppPayload<'a> {
     pub identifier: &'a str,
-    pub message: &'a str
+    pub message: &'a str,
 }
 
 pub struct AppData {
-    pub is_hidden: bool
+    pub is_hidden: bool,
 }
