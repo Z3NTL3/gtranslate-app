@@ -1,4 +1,4 @@
-use tauri::{menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Manager};
+use tauri::{menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Manager};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -76,7 +76,12 @@ pub fn run() {
                                     ShortcutState::Pressed => {
                                         let main_window = _app
                                             .get_webview_window("main")
-                                            .expect("failed retrieving main window");
+                                            .unwrap(); // for now todo change!
+
+                                       // if let None = main_window {
+                                            // app.emit("window_retrieval_failure", payload); // todo: ;``event`` an Enum resolving to &str
+                                        // }
+                                        
                                         
                                         if let Ok(_) = main_window.is_visible() {
                                             main_window.set_focus();
