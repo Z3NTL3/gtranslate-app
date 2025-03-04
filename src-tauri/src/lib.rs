@@ -1,5 +1,5 @@
 use tauri::{
-    menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Manager
+    async_runtime, menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Manager
 };
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
 
@@ -11,6 +11,7 @@ pub fn run() {
     #[allow(unused)]
     tauri::Builder::default()
         .setup(|mut app| {
+            // build and configure system tray stuff in background
             #[cfg(desktop)]
             {
                 let open_item = MenuItemBuilder::new("Open").id("open").build(app)?;
@@ -20,22 +21,28 @@ pub fn run() {
                     .item(&open_item)
                     .item(&quit_item)
                     .build()?;
-
-                let tray = TrayIconBuilder::new()
-                    .icon(app.default_window_icon().unwrap().clone())
+      
+                let handle = app.handle().clone();
+                async_runtime::spawn(async move {
+                    let tray = TrayIconBuilder::new()
+                    .icon(handle.default_window_icon().unwrap().clone())
                     .menu(&menu)
                     .on_menu_event(|app, event| match event.id.as_ref() {
                         "open" => {
                             if let Some(window) = app.get_webview_window("main") {
                                 window.set_focus();
+                                window.hide_menu();
                             }
                         }
                         "quit" => app.exit(0),
                         _ => (),
                     })
-                    .build(app)?;
+                    .build(&handle).unwrap();
+                });
+                
             }
 
+            // read app config and deserialize it; some todo's todo
             let app_config = app
                 .path()
                 .resolve("../src/assets/app-conf.json", BaseDirectory::Resource)?;
@@ -59,49 +66,52 @@ pub fn run() {
                 });
             }
 
+            // configure shortcut keybind to run in background
             #[cfg(desktop)]
             {
                 use tauri_plugin_global_shortcut::{
                     Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState,
                 };
 
-                let ctrl_t = Shortcut::new(Some(Modifiers::ALT), Code::KeyT);
-                app.handle().plugin(
-                    tauri_plugin_global_shortcut::Builder::new()
-                        .with_handler(move |_app, shortcut, event| {
-                            println!("{:?}", shortcut);
-                            if shortcut == &ctrl_t {
-                                match event.state() {
-                                    ShortcutState::Pressed => {
-                                        let main_window = _app.get_webview_window("main");
-
-                                        if let None = main_window {
-                                            _app.emit(
-                                                models::WINDOW_RETRIEVAL_FAILURE, 
-                                                models::AppPayload{
-                                                    identifier: "error",
-                                                    message: "failed retrieving main window"
-                                                }
-                                            );    
-                                        } else {
-                                            let main_window = main_window.unwrap();
-
-                                            if let Ok(_) = main_window.is_visible() {
-                                                main_window.hide();
+                let handle = app.handle().clone();
+                async_runtime::spawn(async move {
+                    let ctrl_t = Shortcut::new(Some(Modifiers::ALT), Code::KeyT);
+                    handle.plugin(
+                        tauri_plugin_global_shortcut::Builder::new()
+                            .with_handler(move |_app, shortcut, event| {
+                                if shortcut == &ctrl_t {
+                                    match event.state() {
+                                        ShortcutState::Pressed => {
+                                            let main_window = _app.get_webview_window("main");
+                                            if let None = main_window {
+                                                _app.emit(
+                                                    models::WINDOW_RETRIEVAL_FAILURE, 
+                                                    models::AppPayload{
+                                                        identifier: "error",
+                                                        message: "failed retrieving main window"
+                                                    }
+                                                );    
                                             } else {
-                                                main_window.set_focus();
+                                                let main_window = main_window.expect("failed retrieving main window");
+
+                                                if let Ok(_) = main_window.is_visible() {
+                                                    main_window.hide();
+                                                } else {
+                                                    main_window.show();
+                                                    main_window.set_focus();
+                                                }
                                             }
                                         }
+                                        ShortcutState::Released => (),
                                     }
-                                    ShortcutState::Released => (),
                                 }
-                            }
-                        })
-                        .build(),
-                )?;
-                app.global_shortcut().register(ctrl_t)?;
+                            })
+                            .build(),
+                    ).expect("failed initializing shortcut plugin");
+                    handle.global_shortcut().register(ctrl_t)
+                        .expect("failed registering shortcut plugin");
+                })
             };
-
             Ok(())
         })
         // .plugin(tauri_plugin_updater::Builder::new().build())
