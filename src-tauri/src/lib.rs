@@ -52,8 +52,9 @@ pub fn run() {
                 serde_json::from_reader(file)?;
 
             if config.use_proxy.is_some_and(|v| v == true) {
-                app = tauri::async_runtime::block_on(async move {
-                    app.translator_bindings()
+                let handle = app.handle().clone();
+                tauri::async_runtime::block_on(async move {
+                    handle.translator_bindings()
                         .lock()
                         .await
                         .use_proxy(
@@ -62,7 +63,6 @@ pub fn run() {
                                 .expect("use_proxy is set to `true`, `proxy` must be set as well"),
                         )
                         .expect("failed setting proxy");
-                    app
                 });
             }
 
@@ -76,6 +76,7 @@ pub fn run() {
                 let handle = app.handle().clone();
                 async_runtime::spawn(async move {
                     let alt_t = Shortcut::new(Some(Modifiers::ALT), Code::KeyT);
+                    
                     handle.plugin(
                         tauri_plugin_global_shortcut::Builder::new()
                             .with_handler(move |_app, shortcut, event| {
@@ -108,7 +109,7 @@ pub fn run() {
                             })
                         .build(),
                     ).expect("failed initializing shortcut plugin");
-                    
+
                     handle.global_shortcut().register(alt_t)
                         .expect("failed registering shortcut plugin");
                 })
