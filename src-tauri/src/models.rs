@@ -8,3 +8,7 @@ pub struct AppPayload<'a> {
     pub identifier: &'a str,
     pub message: &'a str
 }
+
+pub struct AppData {
+    pub is_hidden: bool
+}
