@@ -1,4 +1,4 @@
-use tauri::{menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Manager};
+use tauri::{menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Manager, RunEvent};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -32,9 +32,7 @@ pub fn run() {
                                     window.set_focus();
                                 }
                             }
-                            "quit" => if let Some(window) = app.get_webview_window("main") {
-                                window.set_focus();
-                            } else { () }
+                            "quit" => app.exit(0),
                             _ => ()
                         }
                     )
