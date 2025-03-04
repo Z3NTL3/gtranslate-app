@@ -1,4 +1,4 @@
-use tauri::{menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Manager, RunEvent};
+use tauri::{menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Manager};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
