@@ -75,11 +75,11 @@ pub fn run() {
 
                 let handle = app.handle().clone();
                 async_runtime::spawn(async move {
-                    let ctrl_t = Shortcut::new(Some(Modifiers::ALT), Code::KeyT);
+                    let alt_t = Shortcut::new(Some(Modifiers::ALT), Code::KeyT);
                     handle.plugin(
                         tauri_plugin_global_shortcut::Builder::new()
                             .with_handler(move |_app, shortcut, event| {
-                                if shortcut == &ctrl_t {
+                                if shortcut == &alt_t {
                                     match event.state() {
                                         ShortcutState::Pressed => {
                                             let main_window = _app.get_webview_window("main");
@@ -106,9 +106,10 @@ pub fn run() {
                                     }
                                 }
                             })
-                            .build(),
+                        .build(),
                     ).expect("failed initializing shortcut plugin");
-                    handle.global_shortcut().register(ctrl_t)
+                    
+                    handle.global_shortcut().register(alt_t)
                         .expect("failed registering shortcut plugin");
                 })
             };
