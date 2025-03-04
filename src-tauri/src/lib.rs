@@ -1,16 +1,15 @@
 use tauri::{
-    menu::{MenuBuilder, MenuItemBuilder},
-    path::BaseDirectory,
-    tray::TrayIconBuilder,
-    Manager,
+    menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Manager
 };
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
+
+#[cfg(desktop)]
+mod models;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     #[allow(unused)]
     tauri::Builder::default()
-        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .setup(|mut app| {
             #[cfg(desktop)]
             {
@@ -66,7 +65,7 @@ pub fn run() {
                     Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState,
                 };
 
-                let ctrl_t = Shortcut::new(Some(Modifiers::CONTROL), Code::KeyT);
+                let ctrl_t = Shortcut::new(Some(Modifiers::ALT), Code::KeyT);
                 app.handle().plugin(
                     tauri_plugin_global_shortcut::Builder::new()
                         .with_handler(move |_app, shortcut, event| {
@@ -74,16 +73,24 @@ pub fn run() {
                             if shortcut == &ctrl_t {
                                 match event.state() {
                                     ShortcutState::Pressed => {
-                                        let main_window = _app.get_webview_window("main").unwrap(); // for now todo change!
+                                        let main_window = _app.get_webview_window("main");
 
-                                        // if let None = main_window {
-                                        // app.emit("window_retrieval_failure", payload); // todo: ;``event`` an Enum resolving to &str
-                                        // }
-
-                                        if let Ok(_) = main_window.is_visible() {
-                                            main_window.set_focus();
+                                        if let None = main_window {
+                                            _app.emit(
+                                                models::WINDOW_RETRIEVAL_FAILURE, 
+                                                models::AppPayload{
+                                                    identifier: "error",
+                                                    message: "failed retrieving main window"
+                                                }
+                                            );    
                                         } else {
-                                            main_window.hide();
+                                            let main_window = main_window.unwrap();
+
+                                            if let Ok(_) = main_window.is_visible() {
+                                                main_window.hide();
+                                            } else {
+                                                main_window.set_focus();
+                                            }
                                         }
                                     }
                                     ShortcutState::Released => (),

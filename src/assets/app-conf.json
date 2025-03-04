@@ -1,5 +1,9 @@
 {
     "timeout": "5",
     "proxy": "",
-    "useProxy": false
+    "useProxy": false,
+    "keybinds": {
+        "shortcut": "CTRL + T",
+        "enable": true
+    }
 }
