@@ -5,13 +5,21 @@ use serde_with::{serde_as, DurationSeconds};
 use thiserror::Error;
 
 #[serde_as]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, Deserialize)]
 pub struct AppConfig {
   #[serde_as(as = "DurationSeconds<String>")]
   pub timeout: Duration,
   pub proxy: Option<String>,
   #[serde(rename = "useProxy")]
   pub use_proxy: Option<bool>,
+  #[serde(rename = "autoStart")]
+  pub auto_start: Option<bool>
+}
+
+#[derive(Serialize, Deserialize)]
+struct Keybinds {
+  pub shortcut: Option<String>,
+  pub enable: Option<bool>
 }
 
 #[derive(Error, Debug, Serialize)]
