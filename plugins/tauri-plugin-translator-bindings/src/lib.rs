@@ -39,7 +39,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
     .invoke_handler(tauri::generate_handler![commands::translate])
     .setup(|app, api| {
       #[cfg(mobile)]
-      let translator_bindings = mobile::init(app, api)?;
+      let translator_bindings = Mutex::new(mobile::init(app, api)?);
       #[cfg(desktop)]
       let translator_bindings = Mutex::new(desktop::init(app, api)?);
       app.manage(translator_bindings);

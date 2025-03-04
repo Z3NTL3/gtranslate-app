@@ -18,7 +18,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
   let handle = api.register_android_plugin("", "ExamplePlugin")?;
   #[cfg(target_os = "ios")]
   let handle = api.register_ios_plugin(init_plugin_translator_bindings)?;
-  Ok(TranslatorBindings(handle))
+  Ok(TranslatorBindings{translator: gtranslate::Translator::new(), handle: app.clone()})
 }
 
 /// Access to the translator-bindings APIs.
