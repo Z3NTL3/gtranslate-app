@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/src/app.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="/src/main.ts"></script>
-  <body class="relative bg-[#222222] w-full h-full">
+  <body class="bg-[#222222]">
       <!-- header -->
       <div id="header" data-tauri-drag-region class="relative flex items-center p-3 gap-x-4 w-full bg-[#003366]">
         <img id="logo" class="glow-anim border-transparent" width="30" src="/src-tauri/icons/glogo.png" alt="logo">
@@ -163,10 +163,17 @@
       </div>
       <!-- end -->
 
-      <!-- github tab bar -->
-      <!-- <div class="w-full h-full border-red-500 border">
-        s
-      </div> -->
+     <div class="relative w-full h-full">
+       <!-- crafted by text -->
+       <div class="absolute bottom-0 w-full h-full">
+        <p class="flex justify-center font-raleway text-[13px] font-medium text-gray-400 text-center">Crafted with 
+          <svg class="w-[17px] ml-1 mr-1" viewBox="0 0 40 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.444 20L20 35L35.556 20C38.256 17.967 40 14.744 40 11.111C40 4.978 35.022 0 28.889 0C25.256 0 22.022 1.756 20 4.456C17.978 1.756 14.744 0 11.111 0C4.978 0 0 4.978 0 11.111C0 14.744 1.744 17.967 4.444 20ZM11.111 2C13.961 2 16.685 3.366 18.399 5.654L20 7.792L21.601 5.655C23.315 3.366 26.039 2 28.889 2C33.913 2 38 6.087 38 11.111C38 13.999 36.671 16.657 34.352 18.402L34.255 18.475L34.167 18.56L20 32.222L5.833 18.56L5.745 18.475L5.648 18.402C3.33 16.657 2 13.999 2 11.111C2 6.087 6.087 2 11.111 2Z" fill="#FF0A0A"/>
+            </svg>
+            
+          <a class="text-blue-300 hover:underline">by t.me/z3ntl3</a></p>
+      </div>
       <!-- end -->
+     </div>
   </body>
 </html>
