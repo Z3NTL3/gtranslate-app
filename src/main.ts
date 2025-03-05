@@ -1,14 +1,12 @@
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import { invoke } from "@tauri-apps/api/core";
+import { listen } from '@tauri-apps/api/event';
 
-// todo this is just test
-window.addEventListener("DOMContentLoaded", () => {
-  invoke('plugin:translator-bindings|translate', {
-    timeout: 5,
-    translations_options: {
-        source_lang: "nl",
-        target_lang: "tr",
-        query: "ik ga hardlopen"
-      }
-  }).then(console.log).catch(console.error)
-});
+enum AppEvents {
+    StartGlowEffect="start_glow_effect"
+}
+
+window.onload = () => {
+    listen(AppEvents.StartGlowEffect, (_) => {
+        document.getElementById("logo")?.classList.remove("glow-anim")
+        setTimeout(()=> document.getElementById("logo")?.classList.add("glow-anim"), 400)
+    })
+};

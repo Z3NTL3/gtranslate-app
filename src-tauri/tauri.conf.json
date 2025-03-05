@@ -14,14 +14,15 @@
     "windows": [
       {
         "title": "GTranslate",
-        "width": 400,
-        "height": 700,
+        "width": 360,
+        "height": 620,
         "resizable": false,
         "maximizable": false,
         "minimizable": false,
         "visible": false,
         "decorations": false,
-        "skipTaskbar": true
+        "skipTaskbar": true,
+        "alwaysOnTop": true
       }
     ],
     "security": {
@@ -38,8 +39,8 @@
       "icons/glogo.png",
       "icons/glogo.ico"
     ],
-    "resources": [
-      "../src/assets/app-conf.json"
-    ]
+    "resources": {
+      "../src/assets/app-conf.json": "app-conf.json"
+    }
   }
 }

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[allow(unused)]
-pub const WINDOW_RETRIEVAL_FAILURE: &'static str = "window_retrieval_failure";
+pub const START_GLOW_EFFECT: &'static str = "start_glow_effect";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]

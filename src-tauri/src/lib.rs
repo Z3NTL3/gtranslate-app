@@ -1,10 +1,5 @@
-use std::sync::Mutex;
 use tauri::{
-    async_runtime,
-    menu::{MenuBuilder, MenuItemBuilder},
-    path::BaseDirectory,
-    tray::TrayIconBuilder,
-    Manager,
+    async_runtime, menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Manager
 };
 use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
@@ -43,6 +38,11 @@ pub fn run() {
                                     window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                     window.show();
                                     window.set_focus();
+                                    
+                                    app.emit(models::START_GLOW_EFFECT, models::AppPayload{
+                                        identifier: "info",
+                                        message: "init glow effect"
+                                    });
                                 }
                             }
                             "quit" => app.exit(0),
