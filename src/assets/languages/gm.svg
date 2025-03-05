@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" fill="none"><path fill="#0052B4" d="M0 136h512v240H0z"/><path fill="#496E2D" d="M0 344h512v168H0z"/><path fill="#A2001D" d="M0 0h512v168H0z"/><path fill="#EEE" fill-rule="evenodd" d="M512 160H0v32h512zM0 352h512v-32H0z" clip-rule="evenodd"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 18">
+<title>Flag of The Gambia</title>
+<path d="m0,0h27v18H0" fill="#3A7728"/>
+<path d="m0,0h27v11H0" fill="#0C1C8C"/>
+<path d="m0,0h27v6H0" fill="#CE1126"/>
+<path d="m0,6.5h27m0,5H0" stroke="#FFF"/>
+</svg>

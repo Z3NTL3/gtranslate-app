@@ -1,1 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" fill="none"><path fill="#D80027" fill-rule="evenodd" d="M448 288 0 0v512h480L240 288z" clip-rule="evenodd"/><path fill="#0052B4" fill-rule="evenodd" d="M448 288 0 0v512h480L240 288zm-39 196L169 260h183.7L28 51.3V484z" clip-rule="evenodd"/><path fill="#EEE" d="m211.5 378-31.3-14.7L197 333l-34 6.5-4.3-34.3-23.6 25.2-23.7-25.2-4.3 34.3-34-6.5 16.7 30.3L58.4 378l31.3 14.7L73.1 423l34-6.5 4.2 34.3 23.7-25.2 23.6 25.2 4.3-34.3 34 6.5-16.7-30.3z"/><path fill="#EEE" fill-rule="evenodd" d="m163.1 186 19.5 9.2h9.5a57.2 57.2 0 1 1-114.3 0h9.5l19.5-9.2-10.4-18.8 21.2 4 2.6-21.3 14.8 15.7 14.7-15.7 2.7 21.3 21.1-4z" clip-rule="evenodd"/></svg>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="-17.582 -4.664 71.571 87.246">
+<title>Flag of Nepal</title>
+<desc>Coding according to the official construction in "Constitution of the Kingdom of Nepal, Article 5, Shedule 1", adopted in November 1990</desc>
+<use xlink:href="#b" stroke="#003893" stroke-width="5.1646754223"/>
+<path id="b" d="M -15,37.5735931288 h 60 L -15,0 v 80 h 60 L -15,20 z" fill="#DC143C"/>
+<g fill="#fff">
+<path d="M -11.9502769431,23.4834957055 A 12.8400974233,12.8400974233 0 0,0 11.9502769431,23.4834957055 A 11.9502769431 11.9502769431 0 0,1 -11.9502769431,23.4834957055"/>
+<g transform="translate(0,29.0445562765) scale(5.5610605710)">
+<circle r="1"/>
+<g id="jags6">
+<g id="jags3">
+<path id="jag" d="M 0.195090322016,-0.980785280403 L 0,-1.388784109750 L -0.195090322016,-0.980785280403" transform="rotate(11.25)"/>
+<use xlink:href="#jag" transform="rotate(22.5)"/>
+<use xlink:href="#jag" transform="rotate(45)"/>
+</g>
+<use xlink:href="#jags3" transform="rotate(67.5)"/>
+</g>
+<use xlink:href="#jags6" transform="scale(-1, 1)"/>
+</g>
+<g transform="translate(0,58.7867965644) scale(8.1433982822)">
+<circle r="1"/>
+<g id="rays4">
+<g id="rays2">
+<path id="ray" d="M 0.258819045103,0.965925826289 L 0,1.576749285537 L -0.258819045103,0.965925826289"/>
+<use xlink:href="#ray" transform="rotate(180)"/>
+</g>
+<use xlink:href="#rays2" transform="rotate(90)"/>
+</g>
+<use xlink:href="#rays4" transform="rotate(30)"/>
+<use xlink:href="#rays4" transform="rotate(60)"/>
+</g>
+</g>
+</svg>

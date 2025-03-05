@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" fill="none"><path fill="#EEE" d="M0 0h512v512H0z"/><path fill="#D80027" d="M512 0H0v46.6h512zm0 93H0v46.6h512zM0 186.2h512v46.5H0zm512 93H0v46.6h512zM0 372.3h512V419H0zm512 93.1H0V512h512z"/><path fill="#0052B4" d="M0 0h256v232.7H0z"/><path fill="#EEE" d="m128 42.4 16.6 51.1h53.7l-43.4 31.6 16.5 51-43.4-31.5-43.4 31.6L101 125 57.7 93.5h53.7z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 209 110">
+<rect fill="#bf0a30" width="209" height="110"/>
+<path d="M0,15H209 M0,35H209 M0,55H209 M0,75H209 M0,95H209" stroke="#fff" stroke-width="10"/>
+<rect fill="#002868" width="50" height="50"/>
+<g transform="translate(25,25) scale(15)">
+<g id="B">
+<polygon id="A" fill="#fff" points="0,0 0,1 .5,1" transform="translate(0,-1) rotate(18)"/>
+<use xlink:href="#A" transform="scale(-1,1)"/>
+</g>
+<use xlink:href="#B" transform="rotate(72)"/>
+<use xlink:href="#B" transform="rotate(-72)"/>
+<use xlink:href="#B" transform="rotate(144)"/>
+<use xlink:href="#B" transform="rotate(-144)"/>
+</g>
+</svg>

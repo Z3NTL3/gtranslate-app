@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" fill="none"><g clip-path="url(#a)"><path fill="#EEE" d="M0 0h512v512H0z"/><path fill="#D80027" d="M512 288v-64H288V0h-64v224H0v64h224v224h64V288z"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h512v512H0z"/></clipPath></defs></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 15">
+<rect width="25" height="15" fill="#FFF"/>
+<g fill="#CE1124">
+<rect width="3" height="15" x="11"/>
+<rect width="25" height="3" y="6"/>
+</g>
+</svg>
