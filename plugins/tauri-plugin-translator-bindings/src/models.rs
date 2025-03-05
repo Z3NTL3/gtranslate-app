@@ -12,14 +12,7 @@ pub struct AppConfig {
   pub proxy: Option<String>,
   #[serde(rename = "useProxy")]
   pub use_proxy: Option<bool>,
-  pub keybinds: Keybinds,
   pub autostart: Option<bool>
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Keybinds {
-  pub shortcut: Option<String>,
-  pub enable: Option<bool>
 }
 
 #[derive(Error, Debug, Serialize)]

@@ -4,7 +4,7 @@ use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     path::BaseDirectory,
     tray::TrayIconBuilder,
-    Emitter, Manager,
+    Manager,
 };
 use tauri_plugin_autostart::ManagerExt;
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
@@ -35,7 +35,12 @@ pub fn run() {
                     let tray = TrayIconBuilder::new()
                         .icon(handle.default_window_icon().unwrap().clone())
                         .menu(&menu)
-                        .on_menu_event(|app, event| match event.id.as_ref() {
+                        .on_tray_icon_event(|icon, event| {
+                            
+                        })
+                        .on_menu_event(|app, event| 
+                            match event.id.as_ref() {
+            
                             "open" => {
                                 if let Some(window) = app.get_webview_window("main") {
                                     window.show();
@@ -93,62 +98,6 @@ pub fn run() {
                         .expect("failed setting proxy");
                 });
             }
-
-            // configure shortcut keybind
-            #[cfg(desktop)]
-            {
-                use tauri_plugin_global_shortcut::{
-                    Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState,
-                };
-
-                let alt_t = Shortcut::new(Some(Modifiers::ALT), Code::KeyT);
-                app.handle()
-                    .plugin(
-                        tauri_plugin_global_shortcut::Builder::new()
-                            .with_handler(move |_app, shortcut, event| {
-                                if shortcut == &alt_t {
-                                    match event.state() {
-                                        ShortcutState::Pressed => {
-                                            let main_window = _app.get_webview_window("main");
-                                            if let None = main_window {
-                                                _app.emit(
-                                                    models::WINDOW_RETRIEVAL_FAILURE,
-                                                    models::AppPayload {
-                                                        identifier: "error",
-                                                        message: "failed retrieving main window",
-                                                    },
-                                                );
-                                            } else {
-                                                let main_window = main_window
-                                                    .expect("failed retrieving main window");
-
-                                                let state = _app.state::<Mutex<models::AppData>>();
-                                                let mut app_data = state.lock().expect(
-                                                    "failed retrieving app state or locking",
-                                                );
-
-                                                if !app_data.is_hidden {
-                                                    main_window.hide();
-                                                    app_data.is_hidden = true;
-                                                } else {
-                                                    main_window.show();
-                                                    main_window.set_focus();
-                                                    app_data.is_hidden = false;
-                                                }
-                                            }
-                                        }
-                                        ShortcutState::Released => (),
-                                    }
-                                }
-                            })
-                            .build(),
-                    )
-                    .expect("failed initializing shortcut plugin");
-
-                app.global_shortcut()
-                    .register(alt_t)
-                    .expect("failed registering shortcut plugin");
-            };
             Ok(())
         })
         // .plugin(tauri_plugin_updater::Builder::new().build())

@@ -2,9 +2,5 @@
     "timeout": "5",
     "proxy": "",
     "useProxy": false,
-    "keybinds": {
-        "shortcut": "CTRL + T",
-        "enable": true
-    },
     "autostart": true
 }
