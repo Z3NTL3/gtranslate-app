@@ -14,15 +14,14 @@
     "windows": [
       {
         "title": "GTranslate",
-        "width": 200,
-        "height": 400,
+        "width": 400,
+        "height": 700,
         "resizable": false,
         "maximizable": false,
         "minimizable": false,
         "visible": false,
         "decorations": false,
-        "skipTaskbar": true,
-        "alwaysOnTop": true
+        "skipTaskbar": true
       }
     ],
     "security": {

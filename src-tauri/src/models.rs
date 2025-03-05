@@ -10,6 +10,3 @@ pub struct AppPayload<'a> {
     pub message: &'a str,
 }
 
-pub struct AppData {
-    pub is_position_set: bool,
-}

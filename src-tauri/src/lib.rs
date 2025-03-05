@@ -4,9 +4,9 @@ use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     path::BaseDirectory,
     tray::TrayIconBuilder,
-    Manager, PhysicalPosition,
+    Manager,
 };
-use tauri_plugin_positioner::WindowExt;
+use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
 
 #[cfg(desktop)]
@@ -18,10 +18,6 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            app.manage(Mutex::new(models::AppData {
-                is_position_set: false,
-            }));
-
             // build and configure system tray stuff in background
             #[cfg(desktop)]
             {
@@ -44,7 +40,7 @@ pub fn run() {
                         .on_menu_event(|app, event| match event.id.as_ref() {
                             "open" => {
                                 if let Some(window) = app.get_webview_window("main") {
-                                    // window.as_ref().window().move_window(Position::B)
+                                    window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                     window.show();
                                     window.set_focus();
                                 }
