@@ -20,7 +20,8 @@
         "maximizable": false,
         "minimizable": false,
         "visible": false,
-        "decorations": false
+        "decorations": false,
+        "skipTaskbar": true
       }
     ],
     "security": {
