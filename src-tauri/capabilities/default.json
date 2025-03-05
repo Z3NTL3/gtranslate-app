@@ -9,6 +9,7 @@
     "opener:default",
     "translator-bindings:default",
     "core:window:allow-hide",
-    "core:event:allow-listen"
+    "core:event:allow-listen",
+    "core:window:allow-start-dragging"
   ]
 }

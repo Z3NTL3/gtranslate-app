@@ -7,15 +7,15 @@
     <script type="module" src="/src/main.ts"></script>
   <body class="relative bg-[#222222] w-full h-full">
       <!-- header -->
-      <div data-tauri-drag-region class="relative flex items-center p-3 gap-x-4 w-full bg-[#003366] overflow-clip">
+      <div id="header" data-tauri-drag-region class="relative flex items-center p-3 gap-x-4 w-full bg-[#003366]">
         <img id="logo" class="glow-anim border-transparent" width="30" src="/src-tauri/icons/glogo.png" alt="logo">
         <div class="flex items-center gap-x-2">
           <h1 class="text-white font-bold text-[18px]">GTranslate</h1>
           <p class="items-end justify-end h-full font-semibold text-gray-400 font-pop text-[12px] mt-1">v1</p>
         </div>
         
-        <div class="absolute right-1 top-1" onclick="window.__TAURI__.window.getCurrentWindow().hide()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="absolute right-1 top-1 w-[40px] h-[40px]" onclick="window.__TAURI__.window.getCurrentWindow().hide()">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
@@ -151,15 +151,22 @@
           <!-- textarea -->
           <div id="block-2" class="h-full outline-0 block-active rounded-md text-black  font-roboto p-2 overflow-auto mb-2" contenteditable="true" tabindex="0"></div>
           <!-- end  -->
+
+          <div class="flex grow justify-end items-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18C8.45 18 7.97933 17.8043 7.588 17.413C7.196 17.021 7 16.55 7 16V4C7 3.45 7.196 2.979 7.588 2.587C7.97933 2.19567 8.45 2 9 2H18C18.55 2 19.021 2.19567 19.413 2.587C19.8043 2.979 20 3.45 20 4V16C20 16.55 19.8043 17.021 19.413 17.413C19.021 17.8043 18.55 18 18 18H9ZM9 16H18V4H9V16ZM5 22C4.45 22 3.979 21.8043 3.587 21.413C3.19567 21.021 3 20.55 3 20V7C3 6.71667 3.096 6.479 3.288 6.287C3.47933 6.09567 3.71667 6 4 6C4.28333 6 4.521 6.09567 4.713 6.287C4.90433 6.479 5 6.71667 5 7V20H15C15.2833 20 15.521 20.096 15.713 20.288C15.9043 20.4793 16 20.7167 16 21C16 21.2833 15.9043 21.5207 15.713 21.712C15.521 21.904 15.2833 22 15 22H5ZM9 4V16V4Z" fill="#003366"/>
+              </svg>
+              
+          </div>
         </div>
         <!-- end -->
       </div>
       <!-- end -->
 
       <!-- github tab bar -->
-      <div class="w-full h-full border-red-500 border">
+      <!-- <div class="w-full h-full border-red-500 border">
         s
-      </div>
+      </div> -->
       <!-- end -->
   </body>
 </html>

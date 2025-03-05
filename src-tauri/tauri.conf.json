@@ -22,7 +22,8 @@
         "visible": false,
         "decorations": false,
         "skipTaskbar": true,
-        "alwaysOnTop": true
+        "alwaysOnTop": true,
+        "create": true
       }
     ],
     "security": {
