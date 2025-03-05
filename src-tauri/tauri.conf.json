@@ -14,8 +14,8 @@
     "windows": [
       {
         "title": "GTranslate",
-        "width": 800,
-        "height": 600,
+        "width": 200,
+        "height": 400,
         "resizable": false,
         "maximizable": false,
         "minimizable": false,
