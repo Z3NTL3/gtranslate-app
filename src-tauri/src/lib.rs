@@ -23,7 +23,7 @@ pub fn run() {
             tracing_subscriber::fmt()
                 .with_writer(tracing)
                 .with_max_level(LevelFilter::DEBUG)
-                .with_timer(ChronoLocal::new("%v -%H:%M:%S".to_owned()))
+                .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
                 .with_file(true)
                 .with_line_number(true)
                 .json()
