@@ -53,6 +53,7 @@ pub fn run() {
 
                             println!("{:?}{:?}", icon.id().0, data.is_position_set);
 
+                            // todo apply margin to position
                             if !data.is_position_set {
                                 match event {
                                     tauri::tray::TrayIconEvent::Click {
