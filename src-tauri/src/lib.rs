@@ -3,6 +3,10 @@ use tauri::{
 };
 use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
+use tracing_subscriber::{
+    fmt::time::ChronoLocal,
+    filter::LevelFilter
+};
 
 #[cfg(desktop)]
 mod models;
@@ -13,6 +17,20 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
+            let app_dir = app.path().resolve("app.log", BaseDirectory::Resource).expect("failed resolving path");
+            let tracing = tracing_appender::rolling::never(app_dir, "app.log");
+
+            tracing_subscriber::fmt()
+                .with_writer(tracing)
+                .with_max_level(LevelFilter::DEBUG)
+                .with_timer(ChronoLocal::new("%v -%H:%M:%S".to_owned()))
+                .with_file(true)
+                .json()
+                .init();
+
+            Result::<(),()>::Err(()).map_err(|err| {
+                tracing::error!("wow")
+            });
             // build and configure system tray stuff in background
             #[cfg(desktop)]
             {
