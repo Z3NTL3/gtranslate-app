@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+#[allow(unused)]
 pub const WINDOW_RETRIEVAL_FAILURE: &'static str = "window_retrieval_failure";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

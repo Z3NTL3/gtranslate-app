@@ -3,8 +3,6 @@ import { invoke } from "@tauri-apps/api/core";
 
 // todo this is just test
 window.addEventListener("DOMContentLoaded", () => {
-  getCurrentWindow().show();
-
   invoke('plugin:translator-bindings|translate', {
     timeout: 5,
     translations_options: {

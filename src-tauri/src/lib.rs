@@ -4,8 +4,9 @@ use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     path::BaseDirectory,
     tray::TrayIconBuilder,
-    Manager,
+    Manager, PhysicalPosition,
 };
+use tauri_plugin_positioner::WindowExt;
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
 
 #[cfg(desktop)]
@@ -17,11 +18,6 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            // this doesnt work as well visible: false has no effect either
-            let main = app.get_webview_window("main")
-                .expect("failed getting main window");
-
-            main.hide();
             app.manage(Mutex::new(models::AppData {
                 is_position_set: false,
             }));
@@ -43,51 +39,12 @@ pub fn run() {
                         .icon(handle.default_window_icon().unwrap().clone())
                         .menu(&menu)
                         .on_tray_icon_event(|icon, event| {
-                            let handle = icon.app_handle();
-                            let main = handle
-                                .get_webview_window("main")
-                                .expect("couldn't get mai window");
-
-                            let state = handle.state::<Mutex<models::AppData>>();
-                            let mut data = state.lock().expect("failed locking main thread");
-
-                            println!("{:?}{:?}", icon.id().0, data.is_position_set);
-
-                            // todo apply margin to position
-                            if !data.is_position_set {
-                                match event {
-                                    tauri::tray::TrayIconEvent::Click {
-                                        id,
-                                        position,
-                                        rect,
-                                        button,
-                                        button_state,
-                                    } => {
-                                        main.set_position(position);
-                                        data.is_position_set = true;
-                                    }
-                                    tauri::tray::TrayIconEvent::DoubleClick {
-                                        id,
-                                        position,
-                                        rect,
-                                        button,
-                                    } => {
-                                        main.set_position(position);
-                                        data.is_position_set = true;
-                                    }
-                                    tauri::tray::TrayIconEvent::Enter { id, position, rect } => {
-                                        main.set_position(position);
-                                        data.is_position_set = true;
-                                    },
-                                    tauri::tray::TrayIconEvent::Move { id, position, rect } => (),
-                                    tauri::tray::TrayIconEvent::Leave { id, position, rect } => (),
-                                    _ => todo!(),
-                                }
-                            }
+                            tauri_plugin_positioner::on_tray_event(icon.app_handle(), &event);
                         })
                         .on_menu_event(|app, event| match event.id.as_ref() {
                             "open" => {
                                 if let Some(window) = app.get_webview_window("main") {
+                                    // window.as_ref().window().move_window(Position::B)
                                     window.show();
                                     window.set_focus();
                                 }
