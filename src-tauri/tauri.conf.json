@@ -20,7 +20,7 @@
         "maximizable": false,
         "minimizable": false,
         "visible": false,
-        "center": true
+        "decorations": false
       }
     ],
     "security": {

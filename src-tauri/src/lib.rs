@@ -6,7 +6,6 @@ use tauri::{
     tray::TrayIconBuilder,
     Manager,
 };
-use tauri_plugin_autostart::ManagerExt;
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
 
 #[cfg(desktop)]
@@ -16,13 +15,16 @@ mod models;
 pub fn run() {
     #[allow(unused)]
     tauri::Builder::default()
+        .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            app.manage(Mutex::new(models::AppData{is_position_set: false}));
-
+            // this doesnt work as well visible: false has no effect either
             let main = app.get_webview_window("main")
-                .expect("couldn't get mai window");
+                .expect("failed getting main window");
 
-            main.hide()?;
+            main.hide();
+            app.manage(Mutex::new(models::AppData {
+                is_position_set: false,
+            }));
 
             // build and configure system tray stuff in background
             #[cfg(desktop)]
@@ -42,43 +44,56 @@ pub fn run() {
                         .menu(&menu)
                         .on_tray_icon_event(|icon, event| {
                             let handle = icon.app_handle();
-                            let main = handle.get_webview_window("main")
+                            let main = handle
+                                .get_webview_window("main")
                                 .expect("couldn't get mai window");
 
                             let state = handle.state::<Mutex<models::AppData>>();
-                            let data = state.lock()
-                                .expect("failed locking main thread");
+                            let mut data = state.lock().expect("failed locking main thread");
+
+                            println!("{:?}{:?}", icon.id().0, data.is_position_set);
 
                             if !data.is_position_set {
                                 match event {
-                                    tauri::tray::TrayIconEvent::Click { id, position, rect, button, button_state } => {
+                                    tauri::tray::TrayIconEvent::Click {
+                                        id,
+                                        position,
+                                        rect,
+                                        button,
+                                        button_state,
+                                    } => {
                                         main.set_position(position);
-                                    },
-                                    tauri::tray::TrayIconEvent::DoubleClick { id, position, rect, button } => {
+                                        data.is_position_set = true;
+                                    }
+                                    tauri::tray::TrayIconEvent::DoubleClick {
+                                        id,
+                                        position,
+                                        rect,
+                                        button,
+                                    } => {
                                         main.set_position(position);
-                                    },
+                                        data.is_position_set = true;
+                                    }
                                     tauri::tray::TrayIconEvent::Enter { id, position, rect } => {
                                         main.set_position(position);
+                                        data.is_position_set = true;
                                     },
                                     tauri::tray::TrayIconEvent::Move { id, position, rect } => (),
                                     tauri::tray::TrayIconEvent::Leave { id, position, rect } => (),
                                     _ => todo!(),
                                 }
                             }
-
                         })
-                        .on_menu_event(|app, event| 
-                            match event.id.as_ref() {
-                                "open" => {
-                                    if let Some(window) = app.get_webview_window("main") {
-                                        window.show();
-                                        window.set_focus();
-                                    }
+                        .on_menu_event(|app, event| match event.id.as_ref() {
+                            "open" => {
+                                if let Some(window) = app.get_webview_window("main") {
+                                    window.show();
+                                    window.set_focus();
                                 }
-                                "quit" => app.exit(0),
-                                _ => (),
                             }
-                        )
+                            "quit" => app.exit(0),
+                            _ => (),
+                        })
                         .build(&handle)
                         .unwrap();
                 });
@@ -93,7 +108,8 @@ pub fn run() {
             let config: tauri_plugin_translator_bindings::AppConfig =
                 serde_json::from_reader(file)?;
 
-            #[cfg(desktop)]{
+            #[cfg(desktop)]
+            {
                 use tauri_plugin_autostart::MacosLauncher;
                 use tauri_plugin_autostart::ManagerExt;
 

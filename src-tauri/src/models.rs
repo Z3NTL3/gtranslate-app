@@ -10,5 +10,5 @@ pub struct AppPayload<'a> {
 }
 
 pub struct AppData {
-    pub is_position_set: bool
+    pub is_position_set: bool,
 }
