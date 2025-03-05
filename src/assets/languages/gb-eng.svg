@@ -1,7 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 15">
-<rect width="25" height="15" fill="#FFF"/>
-<g fill="#CE1124">
-<rect width="3" height="15" x="11"/>
-<rect width="25" height="3" y="6"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" id="flag-icons-gb-eng" viewBox="0 0 512 512">
+  <path fill="#fff" d="M0 0h512v512H0z"/>
+  <path fill="#ce1124" d="M215 0h82v512h-82z"/>
+  <path fill="#ce1124" d="M0 215h512v82H0z"/>
 </svg>

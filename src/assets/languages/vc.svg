@@ -1,1 +1,8 @@
-<svg viewBox="0 0 192 128" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h192v128H0z" fill="#fcd022"/><path d="M144 0h48v128h-48z" fill="#007c2e"/><path d="M0 0h48v128H0z" fill="#002674"/><path d="M83.911 92.44L96 115.196l12.089-22.756L96 69.685zM68.267 64l12.089 22.755L92.444 64 80.356 41.244zm31.289 0l12.088 22.756L123.734 64l-12.09-22.756z" fill="#007c2e"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" id="flag-icons-vc" viewBox="0 0 512 512">
+  <g fill-rule="evenodd" stroke-width="1pt">
+    <path fill="#f4f100" d="M0 0h510.4v512H0z"/>
+    <path fill="#199a00" d="M385.6 0H512v512H385.6z"/>
+    <path fill="#0058aa" d="M0 0h126.4v512H0z"/>
+  </g>
+  <path fill="#199a00" fill-rule="evenodd" d="m191.2 138.6-49.5 76.2 47.8 79.3 46.7-78.6zm129.4 0L271 214.8l47.7 79.3 46.8-78.6-45-76.9zm-65.4 103.9-49.4 76.1 47.7 79.4 46.7-78.7z"/>
+</svg>
