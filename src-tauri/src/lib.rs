@@ -17,8 +17,47 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            let app_dir = app.path().resolve("app.log", BaseDirectory::Resource).unwrap();
-            let tracing = tracing_appender::rolling::never(app_dir, "app.log");
+            // test if our app is opened with required privileges
+            // because we need more permissions on some systems to write files in our app sitting within
+            // C:\Program Files / after wizard installation (app bundle)
+            let test_file = app.path().resolve("test.log", BaseDirectory::Resource).unwrap();
+
+            let mut file_opener = tokio::fs::OpenOptions::new();
+            file_opener
+                .read(true)
+                .append(true)
+                .write(true)
+                .create(true);
+
+            let handle = app.handle();
+            let exit = async_runtime::block_on(async move {
+                match file_opener.open(test_file.clone()).await {
+                    Ok(_) => {
+                        tokio::fs::remove_file(test_file);
+                        false
+                    },
+                    Err(err) => {
+                        println!("{}", err);
+                        let window = tauri::WebviewWindowBuilder
+                            ::new(handle, "failures-app", tauri::WebviewUrl::App("src/failures.html".into()))
+                                .center()
+                                .build()
+                                .unwrap();
+                            
+                        window.show();
+                        window.set_focus();
+
+                        true
+                    },
+                }
+            });
+            
+            if exit {
+                return Ok(());
+            }
+            
+            let log_file = app.path().resolve("app.log", BaseDirectory::Resource).unwrap();
+            let tracing = tracing_appender::rolling::never(log_file, "app.log");
 
             tracing_subscriber::fmt()
                 .with_writer(tracing)
@@ -29,10 +68,6 @@ pub fn run() {
                 .json()
                 .with_current_span(true)
                 .init();
-
-            Result::<(),()>::Err(()).map_err(|err| {
-                tracing::error!("wow")
-            });
 
             // build and configure system tray stuff in background
             #[cfg(desktop)]
