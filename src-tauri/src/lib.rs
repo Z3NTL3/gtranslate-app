@@ -37,13 +37,16 @@ pub fn run() {
                         false
                     },
                     Err(err) => {
-                        println!("{}", err);
                         let window = tauri::WebviewWindowBuilder
-                            ::new(handle, "failures-app", tauri::WebviewUrl::App("src/failures.html".into()))
-                                .center()
-                                .build()
-                                .unwrap();
-                            
+                            ::new(
+                                handle, "
+                                failures-app", 
+                            tauri::WebviewUrl::App("src/failures.html".into())
+                        )
+                            .center()
+                            .build()
+                            .unwrap();
+                        
                         window.show();
                         window.set_focus();
 
