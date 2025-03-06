@@ -56,25 +56,25 @@ pub fn run() {
                 }
             });
             
-            // let window = tauri::WebviewWindowBuilder
-            //     ::new(
-            //         handle, 
-            //         "app-failures",
-            //         tauri::WebviewUrl::App("/failures.html".into())
-            // )
-            //     .center()
-            //     .closable(false)
-            //     .resizable(false)
-            //     .decorations(false)
-            //     .minimizable(false)
-            //     .maximizable(false)
-            //     .inner_size(300.0, 200.0)
-            //     // .visible(false)
-            //     .build()
-            //     .unwrap();
+            let window = tauri::WebviewWindowBuilder
+                ::new(
+                    handle, 
+                    "app-failures",
+                    tauri::WebviewUrl::App("/failures.html".into())
+            )
+                .center()
+                .closable(false)
+                .resizable(false)
+                .decorations(false)
+                .minimizable(false)
+                .maximizable(false)
+                .inner_size(300.0, 200.0)
+                // .visible(false)
+                .build()
+                .unwrap();
             
-            // tokio::fs::remove_file(test_file);
-            // return Ok(());
+            tokio::fs::remove_file(test_file);
+            return Ok(());
 
             if exit {
                 return Ok(());
