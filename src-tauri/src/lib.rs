@@ -17,7 +17,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            let app_dir = app.path().resolve("app.log", BaseDirectory::Resource).expect("failed resolving path");
+            let app_dir = app.path().resolve("app.log", BaseDirectory::Resource).unwrap();
             let tracing = tracing_appender::rolling::never(app_dir, "app.log");
 
             tracing_subscriber::fmt()
@@ -33,6 +33,7 @@ pub fn run() {
             Result::<(),()>::Err(()).map_err(|err| {
                 tracing::error!("wow")
             });
+
             // build and configure system tray stuff in background
             #[cfg(desktop)]
             {
@@ -76,8 +77,15 @@ pub fn run() {
             // read app config and deserialize it; some todo's todo
             let app_config = app
                 .path()
-                .resolve("../src/assets/app-conf.json", BaseDirectory::Resource)?;
-            let file = std::fs::File::open(&app_config)?;
+                .resolve("app-conf.json", BaseDirectory::Resource).map_err(|err| {
+                    tracing::error!("could not resolve app-conf.json: {}", err);
+                    err
+                })?;
+            let file = std::fs::File::open(&app_config)
+                .map_err(|err| {
+                    tracing::error!("failed opening config file: {}", err);
+                    err
+                })?;
 
             let config: tauri_plugin_translator_bindings::AppConfig =
                 serde_json::from_reader(file)?;
