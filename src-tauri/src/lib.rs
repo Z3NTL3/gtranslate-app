@@ -38,8 +38,8 @@ pub fn run() {
                     Err(err) => {
                         let window = tauri::WebviewWindowBuilder
                             ::new(
-                                handle, "
-                                failures-app", 
+                                handle, 
+                                 "app-failures", 
                             tauri::WebviewUrl::App("src/failures.html".into())
                         )
                             .center()
@@ -54,6 +54,26 @@ pub fn run() {
                 }
             });
             
+            // let window = tauri::WebviewWindowBuilder
+            //     ::new(
+            //         handle, 
+            //         "app-failures",
+            //         tauri::WebviewUrl::App("src/failures.html".into())
+            // )
+            //     .center()
+            //     .closable(false)
+            //     .resizable(false)
+            //     .decorations(false)
+            //     .minimizable(false)
+            //     .maximizable(false)
+            //     .build()
+            //     .unwrap();
+            
+            // window.show();
+            // window.set_focus();
+
+            // return Ok(());
+
             if exit {
                 return Ok(());
             }

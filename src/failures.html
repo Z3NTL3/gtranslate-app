@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/src/app.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="/src/main.ts"></script>
-  <body class="bg-[#222222] flex flex-col">
+  <body class="bg-[#222222] flex flex-col w-full h-full">
       <!-- header -->
       <div id="header" data-tauri-drag-region class="relative flex items-center p-3 gap-x-4 w-full bg-[#003366]">
         <img id="logo" class="glow-anim border-transparent" width="30" src="/src-tauri/icons/glogo.png" alt="logo">
@@ -14,12 +14,16 @@
           <p class="items-end justify-end h-full font-semibold text-gray-400 font-pop text-[12px] mt-1">v1</p>
         </div>
         
-        <div class="absolute right-1 top-1" onclick="window.__TAURI__.window.getCurrentWindow().hide()">
+        <div class="absolute right-1 top-1" onclick="window.__TAURI__.window.getCurrentWindow().destroy()">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
       <!-- end -->
+
+      <div class="flex grow w-[100%] h-[100%] bottom-0 bg-red-500">
+        a
+      </div>
   </body>
 </html>
