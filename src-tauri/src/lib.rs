@@ -18,8 +18,7 @@ pub fn run() {
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
             // test if our app is opened with required privileges
-            // because we need more permissions on some systems to write files in our app sitting within
-            // C:\Program Files / after wizard installation (app bundle)
+            // because we need more permissions on some systems to write files in our app sitting within directories requiring higher permissions
             let test_file = app.path().resolve("test.log", BaseDirectory::Resource).unwrap();
 
             let mut file_opener = tokio::fs::OpenOptions::new();
