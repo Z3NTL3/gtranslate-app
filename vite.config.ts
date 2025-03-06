@@ -26,11 +26,5 @@ export default defineConfig(async () => ({
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
-  },
-  assetsInclude: [
-    "./src/assets/languages/*",
-    "./src/assets/languages.json",
-    "./src/assets/app.css",
-    "./src/assets/*.ts"
-  ]
+  }
 }));

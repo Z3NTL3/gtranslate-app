@@ -1,5 +1,5 @@
 use tauri::{
-    async_runtime, menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Manager
+    async_runtime, menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Listener, Manager
 };
 use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
@@ -17,6 +17,10 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
+            app.listen(models::WINDOW_LOADED, |event| {
+                println!("event: {}", event.payload());
+            });
+
             // test if our app is opened with required privileges
             // because we need more permissions on some systems to write files in our app sitting within directories requiring higher permissions
             let test_file = app.path().resolve("test.log", BaseDirectory::Resource).unwrap();
@@ -28,11 +32,11 @@ pub fn run() {
                 .write(true)
                 .create(true);
 
+            let test_file_ = test_file.clone();
             let handle = app.handle();
             let exit = async_runtime::block_on(async move {
-                match file_opener.open(test_file.clone()).await {
+                match file_opener.open(test_file_).await {
                     Ok(_) => {
-                        tokio::fs::remove_file(test_file);
                         false
                     },
                     Err(err) => {
@@ -43,12 +47,10 @@ pub fn run() {
                             tauri::WebviewUrl::App("src/failures.html".into())
                         )
                             .center()
+                            .visible(false)
                             .build()
                             .unwrap();
-                        
-                        window.show();
-                        window.set_focus();
-
+                    
                         true
                     },
                 }
@@ -58,7 +60,7 @@ pub fn run() {
             //     ::new(
             //         handle, 
             //         "app-failures",
-            //         tauri::WebviewUrl::App("src/failures.html".into())
+            //         tauri::WebviewUrl::App("/failures.html".into())
             // )
             //     .center()
             //     .closable(false)
@@ -66,18 +68,18 @@ pub fn run() {
             //     .decorations(false)
             //     .minimizable(false)
             //     .maximizable(false)
+            //     .inner_size(300.0, 200.0)
+            //     // .visible(false)
             //     .build()
             //     .unwrap();
             
-            // window.show();
-            // window.set_focus();
-
+            // tokio::fs::remove_file(test_file);
             // return Ok(());
 
             if exit {
                 return Ok(());
             }
-            
+
             let log_file = app.path().resolve("app.log", BaseDirectory::Resource).unwrap();
             let tracing = tracing_appender::rolling::never(log_file, "app.log");
 
