@@ -36,6 +36,23 @@
     border-width: 1px;
 }
 
+.timer-anim {
+    animation-name: timer-effect;
+    animation-duration: 200ms;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+    animation-direction: normal;
+}
+
+@keyframes timer-effect {
+    from {
+        filter: blur(2px);
+    }
+    to {
+        filter: blur(0px);
+    }
+} 
+
 @keyframes glow-effect {
     0% {
         box-shadow: inset 4px 4px 10px 10px rgba(11, 201, 222, 0), 4px 4px 100px 8px rgba(11, 201, 222, 0);

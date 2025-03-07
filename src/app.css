@@ -1,4 +1,4 @@
-/*! tailwindcss v4.0.11 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.0.12 | MIT License | https://tailwindcss.com */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 @layer theme, base, components, utilities;
@@ -8,8 +8,8 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-red-500: oklch(0.637 0.237 25.331);
     --color-blue-300: oklch(0.809 0.105 251.813);
+    --color-gray-300: oklch(0.872 0.01 258.338);
     --color-gray-400: oklch(0.707 0.022 261.325);
     --color-black: #000;
     --color-white: #fff;
@@ -205,14 +205,14 @@
   .right-1 {
     right: calc(var(--spacing) * 1);
   }
-  .bottom-0 {
-    bottom: calc(var(--spacing) * 0);
+  .bottom-3 {
+    bottom: calc(var(--spacing) * 3);
   }
   .left-\[45\%\] {
     left: 45%;
   }
-  .z-2 {
-    z-index: 2;
+  .z-3 {
+    z-index: 3;
   }
   .z-4 {
     z-index: 4;
@@ -238,32 +238,11 @@
       max-width: 96rem;
     }
   }
-  .m-0 {
-    margin: calc(var(--spacing) * 0);
-  }
-  .m-1 {
-    margin: calc(var(--spacing) * 1);
-  }
   .m-2 {
     margin: calc(var(--spacing) * 2);
   }
-  .m-3 {
-    margin: calc(var(--spacing) * 3);
-  }
   .m-4 {
     margin: calc(var(--spacing) * 4);
-  }
-  .m-5 {
-    margin: calc(var(--spacing) * 5);
-  }
-  .m-6 {
-    margin: calc(var(--spacing) * 6);
-  }
-  .m-7 {
-    margin: calc(var(--spacing) * 7);
-  }
-  .m-9 {
-    margin: calc(var(--spacing) * 9);
   }
   .m-32 {
     margin: calc(var(--spacing) * 32);
@@ -280,20 +259,8 @@
   .mt-8 {
     margin-top: calc(var(--spacing) * 8);
   }
-  .mt-\[20px\] {
-    margin-top: 20px;
-  }
-  .mt-\[40px\] {
-    margin-top: 40px;
-  }
-  .mt-\[45px\] {
-    margin-top: 45px;
-  }
   .mt-\[50px\] {
     margin-top: 50px;
-  }
-  .mt-\[200px\] {
-    margin-top: 200px;
   }
   .mr-1 {
     margin-right: calc(var(--spacing) * 1);
@@ -328,6 +295,12 @@
   .table {
     display: table;
   }
+  .h-0 {
+    height: calc(var(--spacing) * 0);
+  }
+  .h-1 {
+    height: calc(var(--spacing) * 1);
+  }
   .h-2 {
     height: calc(var(--spacing) * 2);
   }
@@ -337,23 +310,11 @@
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
-  .h-5 {
-    height: calc(var(--spacing) * 5);
-  }
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
   .h-7 {
     height: calc(var(--spacing) * 7);
-  }
-  .h-8 {
-    height: calc(var(--spacing) * 8);
-  }
-  .h-9 {
-    height: calc(var(--spacing) * 9);
-  }
-  .h-\[100\%\] {
-    height: 100%;
   }
   .h-\[150px\] {
     height: 150px;
@@ -373,20 +334,17 @@
   .min-h-\[170px\] {
     min-height: 170px;
   }
-  .w-3 {
-    width: calc(var(--spacing) * 3);
+  .w-0 {
+    width: calc(var(--spacing) * 0);
   }
-  .w-7 {
-    width: calc(var(--spacing) * 7);
+  .w-2 {
+    width: calc(var(--spacing) * 2);
   }
   .w-\[17px\] {
     width: 17px;
   }
   .w-\[80\%\] {
     width: 80%;
-  }
-  .w-\[100\%\] {
-    width: 100%;
   }
   .w-full {
     width: 100%;
@@ -481,9 +439,6 @@
   .bg-\[\#acddf1\] {
     background-color: #acddf1;
   }
-  .bg-red-500 {
-    background-color: var(--color-red-500);
-  }
   .p-0 {
     padding: calc(var(--spacing) * 0);
   }
@@ -498,9 +453,6 @@
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);
-  }
-  .p-6 {
-    padding: calc(var(--spacing) * 6);
   }
   .p-7 {
     padding: calc(var(--spacing) * 7);
@@ -522,6 +474,9 @@
   }
   .font-roboto {
     font-family: var(--font-roboto);
+  }
+  .text-\[11px\] {
+    font-size: 11px;
   }
   .text-\[12px\] {
     font-size: 12px;
@@ -565,6 +520,9 @@
   }
   .text-blue-300 {
     color: var(--color-blue-300);
+  }
+  .text-gray-300 {
+    color: var(--color-gray-300);
   }
   .text-gray-400 {
     color: var(--color-gray-400);
@@ -653,6 +611,21 @@
 .block-active-default {
   border-style: dashed;
   border-width: 1px;
+}
+.timer-anim {
+  animation-name: timer-effect;
+  animation-duration: 200ms;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+  animation-direction: normal;
+}
+@keyframes timer-effect {
+  from {
+    filter: blur(2px);
+  }
+  to {
+    filter: blur(0px);
+  }
 }
 @keyframes glow-effect {
   0% {

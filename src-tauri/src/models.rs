@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[allow(unused)]
 pub const START_GLOW_EFFECT: &'static str = "start_glow_effect";
 pub const WINDOW_LOADED: &'static str = "window_loaded";
+pub const EXIT: &'static str = "exit";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]

@@ -17,8 +17,26 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            app.listen(models::WINDOW_LOADED, |event| {
+            let handle = app.handle().clone();
+            app.listen(models::EXIT, move |_| handle.exit(0));
+
+            let handle = app.handle().clone();
+            app.listen(models::WINDOW_LOADED, move |event| {
                 println!("event: {}", event.payload());
+                for (label, window) in &handle.webview_windows() {
+                    if !label.contains("main") {
+                        if let None = window.is_focused().is_ok().then(|| {
+                            println!("window show");
+                            window.show();
+                        }) {
+                            window.is_visible().is_ok().then(|| {
+                                println!("window show");
+                                window.show();
+                            });
+                        }
+                    }
+                    
+                };
             });
 
             // test if our app is opened with required privileges
@@ -43,11 +61,18 @@ pub fn run() {
                         let window = tauri::WebviewWindowBuilder
                             ::new(
                                 handle, 
-                                 "app-failures", 
-                            tauri::WebviewUrl::App("src/failures.html".into())
+                                "app-failures",
+                                tauri::WebviewUrl::App("src/failures.html".into())
                         )
                             .center()
+                            .closable(false)
+                            .resizable(false)
+                            .decorations(false)
+                            .minimizable(false)
+                            .maximizable(false)
+                            .inner_size(300.0, 200.0)
                             .visible(false)
+                            .always_on_top(true)
                             .build()
                             .unwrap();
                     
@@ -56,26 +81,12 @@ pub fn run() {
                 }
             });
             
-            let window = tauri::WebviewWindowBuilder
-                ::new(
-                    handle, 
-                    "app-failures",
-                    tauri::WebviewUrl::App("/failures.html".into())
-            )
-                .center()
-                .closable(false)
-                .resizable(false)
-                .decorations(false)
-                .minimizable(false)
-                .maximizable(false)
-                .inner_size(300.0, 200.0)
-                // .visible(false)
-                .build()
-                .unwrap();
+            println!("tokio rm file");
+            async_runtime::block_on(async move {
+                tokio::fs::remove_file(test_file).await;
+            });
+            println!("should be removed");
             
-            tokio::fs::remove_file(test_file);
-            return Ok(());
-
             if exit {
                 return Ok(());
             }
@@ -121,7 +132,7 @@ pub fn run() {
                                     
                                     app.emit(models::START_GLOW_EFFECT, models::AppPayload{
                                         identifier: "info",
-                                        message: "init glow effect"
+                                        message: "start glow effect"
                                     });
                                 }
                             }

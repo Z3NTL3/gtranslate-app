@@ -9,7 +9,8 @@
     "beforeBuildCommand": "npm run build",
     "frontendDist": [
       "../dist",
-      "../src"
+      "../src",
+      "./icons/glogo.png"
     ]
   },
   "app": {

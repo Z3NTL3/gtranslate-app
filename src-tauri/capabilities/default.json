@@ -10,6 +10,8 @@
     "translator-bindings:default",
     "core:window:allow-hide",
     "core:event:allow-listen",
-    "core:window:allow-start-dragging"
+    "core:event:allow-emit",
+    "core:window:allow-start-dragging",
+    "core:window:allow-destroy"
   ]
 }
