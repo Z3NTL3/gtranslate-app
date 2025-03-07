@@ -220,6 +220,9 @@
   .z-8 {
     z-index: 8;
   }
+  .z-9 {
+    z-index: 9;
+  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -243,6 +246,12 @@
   }
   .m-4 {
     margin: calc(var(--spacing) * 4);
+  }
+  .m-8 {
+    margin: calc(var(--spacing) * 8);
+  }
+  .m-9 {
+    margin: calc(var(--spacing) * 9);
   }
   .m-32 {
     margin: calc(var(--spacing) * 32);
@@ -316,6 +325,9 @@
   .h-7 {
     height: calc(var(--spacing) * 7);
   }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
+  }
   .h-\[150px\] {
     height: 150px;
   }
@@ -340,8 +352,29 @@
   .w-2 {
     width: calc(var(--spacing) * 2);
   }
+  .w-6 {
+    width: calc(var(--spacing) * 6);
+  }
+  .w-\[5px\] {
+    width: 5px;
+  }
+  .w-\[15px\] {
+    width: 15px;
+  }
   .w-\[17px\] {
     width: 17px;
+  }
+  .w-\[20px\] {
+    width: 20px;
+  }
+  .w-\[24px\] {
+    width: 24px;
+  }
+  .w-\[30px\] {
+    width: 30px;
+  }
+  .w-\[40px\] {
+    width: 40px;
   }
   .w-\[80\%\] {
     width: 80%;
@@ -453,6 +486,12 @@
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);
+  }
+  .p-5 {
+    padding: calc(var(--spacing) * 5);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
   }
   .p-7 {
     padding: calc(var(--spacing) * 7);

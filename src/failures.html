@@ -9,12 +9,13 @@
       <!-- header -->
       <div id="header" data-tauri-drag-region class="relative flex items-center p-3 gap-x-4 w-full bg-[#003366]">
         <img id="logo" class="glow-anim border-transparent" width="30" src="../src-tauri/icons/glogo.png" alt="logo">
+        
         <div class="flex items-center gap-x-2">
           <h1 class="text-white font-bold text-[18px]">GTranslate</h1>
           <p class="items-end justify-end h-full font-semibold text-gray-400 font-pop text-[12px] mt-1">v1</p>
         </div>
         
-        <div class="absolute right-1 top-1" onclick="window.__TAURI__.window.getCurrentWindow().destroy()">
+        <div class="absolute right-1 top-1" onclick="window.__TAURI__.event.emit('exit')">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -23,8 +24,7 @@
       <!-- end -->
 
       <div class="relative flex flex-col grow w-full h-full justify-center items-center text-gray-300 text-[13px] font-medium font-raleway">
-       <p>Please open GTranslate as <span class="font-bold">administrator</span>. </p>
-
+        <p>Please open GTranslate as <span class="font-bold">administrator</span>. </p>    
        <div class="absolute bottom-3 text-[11px] text-gray-400">Closing in <span id="timer">5</span> seconds</div>
       </div>
       <script>
@@ -34,7 +34,8 @@
           secondsCounter++;
 
           if(secondsCounter >= 5) {
-            return clearInterval(counter)
+            clearInterval(counter)
+            return window.__TAURI__.event.emit('exit')
           }
 
           
