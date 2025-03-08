@@ -23,11 +23,11 @@
       <!-- end -->
 
       <!-- translator -->
-      <div class="flex flex-col mt-[50px] items-center">
+      <div class="relative flex flex-col mt-[50px] items-center">
         <!-- language selector -->
         <div class="relative flex bg-[#acddf1] w-[80%] min-h-[45px] rounded-full">
           <!-- language item -->
-          <div class="flex items-center ml-2 gap-x-2">
+          <div class="flex items-center ml-2 gap-x-2" onmouseover="showSelector(this)">
             <img class="rounded-full" width="28" src="/languages/de.svg" alt="">
             <p class="font-bold text-[14px] font-raleway">German</p>
           </div>
@@ -42,19 +42,43 @@
           <!-- end -->
 
           <!-- language item -->
-          <div class="flex items-center mr-2 gap-x-2 justify-end grow">
+          <div class="flex items-center mr-2 gap-x-2 justify-end grow" onmouseover="showSelector(this)">
             <p class="font-bold text-[14px] font-raleway">Spanish</p>
             <!-- language item -->
             <div class="flex items-centergap-x-2">
               <img class="rounded-full" width="28" src="/languages/es.svg" alt="">
-                
             </div>
             <!-- end -->
           </div>
           <!-- end -->
         </div>
         <!-- end -->
+        
+        <!-- language selector -->
+        <div id="language-selector" class="hidden absolute flex flex-col items-center top-12 text-white font-bold left-10 max-h-[200px] min-h-[200px] bg-gray-900 w-[140px] z-10 rounded-md"
+          style="
+            box-shadow: inset 2px 2px 20px 3px rgba(223, 222, 222, 0.2), 2px 2px 100px 3px #0e0e0e;
+          "
+        >
+         
+          <div class="w-full h-full overflow-auto">
+            <div class="relative flex justify-start items-center w-full h-full">
+              <input spellcheck="false" autocomplete="off" aria-autocomplete="none"
+              id="search-bar" class="outline-0 p-2 text-[12px] font-light text-white font-raleway max-w-[115px]" type="text" placeholder="Search" tabindex="-1">
+              <svg class="w-[30px] h-[30px] absolute right-0 object-scale-down  scale-70 top-[2.5px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 15L21 21M10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+  
+            
+            <div class="flex justify-center bg-gray-500 w-[125px] h-[1px]"></div>
+            <div id="languages" class="flex flex-col w-full h-full p-2">
+            </div>
+          </div>
+        </div>
+        <!-- end -->
 
+        
         <!-- block 1 -->
         <div class="relative overflow-auto font-roboto flex flex-col bg-[#FFFBFE] mt-7 h-[150px] min-h-[170px] w-[80%] rounded-lg outline-0 p-2 text-[14px]" tabindex="-1">
           <!-- head -->
@@ -117,5 +141,51 @@
         <a class="text-blue-300 hover:underline ml-1 cursor-pointer">t.me/z3ntl3</a></p>
       <!-- end -->
      </div>
+
+     <script>
+      var dataset;
+      var selector = document.getElementById("language-selector")
+
+      var hideSelector = (called_from) => {
+        selector.classList.remove("hidden")
+      }
+      var showSelector = (called_from) => {
+        selector.classList.remove("hidden")
+      }
+
+      var searchBar = document.getElementById("search-bar");
+      searchBar.onkeyup = (event) => {
+        let key = event.key;
+        let text = searchBar.value
+        
+        for (let i = 0; i < dataset.length; i++) {
+          let language = dataset[i];
+          
+          if (String(language.name).toLowerCase().includes(text) || String(language.name).includes(text)) {
+            if(typeof dataset[i].added !== "undefined" && dataset[i].added) {
+              fetch("languages.json").then((res) => {
+                res.json().then((v) => dataset = v)
+              })
+              document.getElementById("languages").innerHTML = ""
+              let event = new Event();
+              
+              searchBar.dispatchEvent(event)
+            }
+            let el = document.createElement("div")
+            el.setAttribute("class", "flex items-center gap-x-1 hover:bg-gray-800")
+            el.innerHTML = `<img  onerror="this.src='./languages/404.jpg'" class="rounded-full"  src="./languages/${language.code}.svg" alt="${language.code}" width="20">
+                <p class="font-pop text-[12px] font-light text-gray-300">${language.name}</p>`
+
+            items = document.getElementById("languages");
+            items.insertBefore(el, items.firstChild)
+            dataset[i].added = true
+          }
+        }
+      }
+
+      fetch("languages.json").then((res) => {
+        res.json().then((v) => dataset = v)
+      })
+    </script>
   </body>
 </html>
