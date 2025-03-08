@@ -154,25 +154,26 @@
       }
 
       var searchBar = document.getElementById("search-bar");
-      searchBar.onkeyup = (event) => {
-        let key = event.key;
+      searchBar.oninput = (event) => {
+        let key = event.value;
         let text = searchBar.value
+        console.log(text)
         
         for (let i = 0; i < dataset.length; i++) {
           let language = dataset[i];
           
-          if (String(language.name).toLowerCase().includes(text) || String(language.name).includes(text)) {
+          if (String(language.name).toLowerCase().includes(text) || String(language.name).toLowerCase().includes(text)) {
             if(typeof dataset[i].added !== "undefined" && dataset[i].added) {
               fetch("languages.json").then((res) => {
                 res.json().then((v) => dataset = v)
               })
               document.getElementById("languages").innerHTML = ""
-              let event = new Event();
-              
-              searchBar.dispatchEvent(event)
+              let event = new Event("keyup");
+              return searchBar.dispatchEvent(event)
             }
             let el = document.createElement("div")
             el.setAttribute("class", "flex items-center gap-x-1 hover:bg-gray-800")
+            el.setAttribute("onclick", `flagClicked('left', '${language.name}', '${language.code}')`)
             el.innerHTML = `<img  onerror="this.src='./languages/404.jpg'" class="rounded-full"  src="./languages/${language.code}.svg" alt="${language.code}" width="20">
                 <p class="font-pop text-[12px] font-light text-gray-300">${language.name}</p>`
 
@@ -182,7 +183,9 @@
           }
         }
       }
-
+      const flagClicked = (side, name, code) => {
+        console.log(side, name, code)
+      }
       fetch("languages.json").then((res) => {
         res.json().then((v) => dataset = v)
       })
