@@ -1,3 +1,9 @@
+<!-- 
+translator end is completely written in Rust;
+
+there is a plugin i've made under /plugins dir, this is a plugin for Tauri providing bindings to the GUI (frontend).
+It uses my gtranslate-rs for Google Translations
+-->
 <!doctype html>
 <html class="h-full" lang="en">
   <head>
@@ -23,13 +29,13 @@
       <!-- end -->
 
       <!-- translator -->
-      <div class="relative flex flex-col mt-[50px] items-center">
+      <div id="translator" class="relative flex flex-col mt-[50px] items-center">
         <!-- language selector -->
         <div class="relative flex bg-[#acddf1] w-[80%] min-h-[45px] rounded-full">
           <!-- language item -->
           <div class="flex items-center ml-2 gap-x-2" onmouseover="showSelector(this)" name="left">
-            <img class="rounded-full" width="28" src="/languages/de.svg" alt="">
-            <p class="font-bold text-[14px] font-raleway">German</p>
+            <img id="lang-header-img-block1" class="rounded-full" width="28" src="/languages/de.svg" alt="">
+            <p id="lang-header-block1" class="font-bold text-[14px] font-raleway" alt="de">German</p>
           </div>
           <!-- end -->
 
@@ -43,10 +49,10 @@
 
           <!-- language item -->
           <div class="flex items-center mr-2 gap-x-2 justify-end grow" onmouseover="showSelector(this)" name="right">
-            <p class="font-bold text-[14px] font-raleway">Spanish</p>
+            <p id="lang-header-block2" class="font-bold text-[14px] font-raleway" alt="es">Spanish</p>
             <!-- language item -->
             <div class="flex items-centergap-x-2">
-              <img class="rounded-full" width="28" src="/languages/es.svg" alt="">
+              <img id="lang-header-img-block2" class="rounded-full" width="28" src="/languages/es.svg" alt="">
             </div>
             <!-- end -->
           </div>
@@ -61,18 +67,19 @@
           "
         >
          
-          <div class="flex flex-col items-center w-full h-full overflow-auto">
-            <div class="relative flex justify-start items-center w-full h-full">
+          <div id="view" class="relative flex flex-col items-center w-full h-full overflow-auto">
+            <div class="absolute top-0">
               <input spellcheck="false" autocomplete="off" aria-autocomplete="none"
               id="search-bar" class="outline-0 p-2 text-[12px] font-light text-white font-raleway max-w-[115px]" type="text" placeholder="Search" tabindex="-1">
               <svg class="w-[30px] h-[30px] absolute right-0 object-scale-down  scale-70 top-[2.5px]" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15 15L21 21M10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
+              
+              <div class="flex justify-center bg-gray-500 w-[125px] h-[1px]"></div>
             </div>
   
             
-            <div class="flex justify-center bg-gray-500 w-[125px] h-[1px]"></div>
-            <div id="languages" class="flex flex-col w-full h-full p-2">
+            <div id="languages" class="flex flex-col w-full h-full p-2 mt-[30px] overflow-auto ">
             </div>
           </div>
         </div>
@@ -83,7 +90,7 @@
         <div class="relative overflow-auto font-roboto flex flex-col bg-[#FFFBFE] mt-7 h-[150px] min-h-[170px] w-[80%] rounded-lg outline-0 p-2 text-[14px]" tabindex="-1">
           <!-- head -->
           <div class="flex">
-            <h1 id="block-2-lang-text" class="text-[#003366] font-roboto text-[16px] font-bold p-1">German</h1>
+            <h1 id="block-1-lang-text" class="text-[#003366] font-roboto text-[16px] font-bold p-1">German</h1>
             <div class="flex grow justify-end">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="document.getElementById('block-1').innerText = ''"> 
                 <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#1F1F1F"/>
@@ -98,7 +105,7 @@
 
           <!-- translate btn -->
           <div class="flex grow justify-end">
-            <div class="cursor-pointer flex items-center justify-center bg-[#FF6600] text-white min-w-[100px] font-roboto font-normal text-[15px] rounded-full min-h-[35px]">Translate</div>
+            <div id="translate-btn" class="cursor-pointer flex items-center justify-center bg-[#FF6600] text-white min-w-[100px] font-roboto font-normal text-[15px] rounded-full min-h-[35px]">Translate</div>
           </div>
           <!-- end -->
         </div>
@@ -143,42 +150,42 @@
      </div>
 
      <script>
+      var side = 'left'
       var dataset;
       var selector = document.getElementById("language-selector")
+      var view = document.getElementById("view")
 
       var hideSelector = (called_from) => {
         selector.classList.remove("hidden")
+        selector.classList.add("hidden")
       }
       var showSelector = (called_from) => {
         if(called_from.getAttribute("name") === "left"){
+          side = 'left'
           selector.setAttribute("class", "hidden absolute flex flex-col items-center top-13 text-white font-bold left-10 max-h-[200px] min-h-[200px] bg-gray-900 w-[140px] z-10 rounded-md")
         } else {
+          side = 'right'
           selector.setAttribute("class","hidden absolute flex flex-col items-center top-13 text-white font-bold right-10 max-h-[200px] min-h-[200px] bg-gray-900 w-[140px] z-10 rounded-md")
         }
         selector.classList.remove("hidden")
       }
 
       var searchBar = document.getElementById("search-bar");
-      searchBar.oninput = (event) => {
+      searchBar.oninput = async (event) => {
         let key = event.value;
         let text = searchBar.value
-        console.log(text)
         
         for (let i = 0; i < dataset.length; i++) {
           let language = dataset[i];
-          
-          if (String(language.name).toLowerCase().includes(text) || String(language.name).toLowerCase().includes(text)) {
-            if(typeof dataset[i].added !== "undefined" && dataset[i].added) {
-              fetch("languages.json").then((res) => {
-                res.json().then((v) => dataset = v)
-              })
-              document.getElementById("languages").innerHTML = ""
-              let event = new Event("keyup");
-              return searchBar.dispatchEvent(event)
+          if (String(language.name).toLowerCase().includes(text) || String(language.name).toLowerCase().includes(text) ) {
+            if (typeof language.added !== "undefined" || language.added) {
+              document.getElementById("languages").innerHTML = ``
+              dataset = await (await fetch("languages.json")).json()
             }
+
             let el = document.createElement("div")
             el.setAttribute("class", "flex items-center gap-x-1 hover:bg-gray-800")
-            el.setAttribute("onclick", `flagClicked('left', '${language.name}', '${language.code}')`)
+            el.setAttribute("onclick", `flagClicked('${language.name}', '${language.code}')`)
             el.innerHTML = `<img  onerror="this.src='./languages/404.jpg'" class="rounded-full"  src="./languages/${language.code}.svg" alt="${language.code}" width="20">
                 <p class="font-pop text-[12px] font-light text-gray-300">${language.name}</p>`
 
@@ -188,11 +195,87 @@
           }
         }
       }
-      const flagClicked = (side, name, code) => {
+      const flagClicked = (name, code) => {
+        if (side === 'right') {
+          document.getElementById("block-2-lang-text").innerText = name;
+          document.getElementById("lang-header-block2").innerText = name;
+          document.getElementById("lang-header-block2").setAttribute("alt", code)
+          document.getElementById("lang-header-img-block2").setAttribute("src", `/languages/${code}.svg`)
+          document.getElementById("lang-header-img-block2").setAttribute("onerror", 'this.src="/languages/404.jpg"')
+          selector.classList.remove("hidden")
+          selector.classList.add("hidden")
+          view.scrollTop = 0;
+          return;
+        } 
+
+        document.getElementById("block-1-lang-text").innerText = name;
+          document.getElementById("lang-header-block1").innerText = name;
+          document.getElementById("lang-header-block1").setAttribute("alt", code)
+          document.getElementById("lang-header-img-block1").setAttribute("src", `/languages/${code}.svg`)
+          document.getElementById("lang-header-img-block1").setAttribute("onerror", 'this.src="/languages/404.png"')
+          selector.classList.remove("hidden")
+          selector.classList.add("hidden")
         console.log(side, name, code)
       }
-      fetch("languages.json").then((res) => {
-        res.json().then((v) => dataset = v)
+      
+      const reloadLanguages = () => {
+        fetch("languages.json").then((res) => {
+          res.json().then((v) => {
+            dataset = v
+            for (let i = 0; i < dataset.length; i++) {
+              let language = dataset[i];
+
+              let el = document.createElement("div")
+              el.setAttribute("class", "flex items-center gap-x-1 hover:bg-gray-800")
+              el.setAttribute("onclick", `flagClicked('${language.name}', '${language.code}')`)
+              el.innerHTML = `<img  onerror="this.src='./languages/404.jpg'" class="rounded-full"  src="./languages/${language.code}.svg" alt="${language.code}" width="20">
+                  <p class="font-pop text-[12px] font-light text-gray-300">${language.name}</p>`
+
+              items = document.getElementById("languages");
+              items.insertBefore(el, items.firstChild)
+            }
+          
+          })
+        })
+      }
+      reloadLanguages()
+
+      var selectionArea = document.getElementById("language-selector");
+
+      selectionArea.addEventListener("mouseleave", function() {
+          document.getElementById("language-selector").classList.remove("hidden")
+          document.getElementById("language-selector").classList.add("hidden")
+          document.getElementById("search-bar").value = ""
+          document.getElementById("search-bar").placeholder = "Search"
+          reloadLanguages()
+      });
+
+      document.getElementById('translate-btn').addEventListener('click', (event) => {
+        // window.__TAURI__.core.invoke('plugin:translator-bindings|translate', {timeout_secs: 5, translations_options: {source_lang: "nl", target_lang: "tr", query: "hallo wereld"}}).then(console.log)
+        let query = document.getElementById("block-1").innerText
+        if (query.length === 0)
+          return;
+
+        let opts = {
+          timeout_secs: 5,
+          translations_options: {
+            source_lang: document.getElementById("lang-header-block1").getAttribute("alt"),
+            target_lang: document.getElementById("lang-header-block2").getAttribute("alt"),
+            query: document.getElementById("block-1").innerText
+          }
+        }
+        document.getElementById("block-2").innerHTML = `
+          <div class="flex grow justify-center items-center h-full w-full" role="status">
+            <svg aria-hidden="true" class="w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+            </svg>
+            <span class="sr-only">Loading...</span>
+        </div>
+          `
+        window.__TAURI__.core.invoke('plugin:translator-bindings|translate', opts).then((translated) => {         
+          document.getElementById("block-2").innerText = translated
+        })
       })
     </script>
   </body>

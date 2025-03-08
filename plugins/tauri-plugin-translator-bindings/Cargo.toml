@@ -12,7 +12,7 @@ links = "tauri-plugin-translator-bindings"
 tauri = { version = "2.3.0" }
 serde = "1.0"
 thiserror = "2"
-gtranslate = "0.1.1"
+gtranslate = "0.1.2"
 reqwest = "0.12.12"
 serde_with = "3.12.0"
 tokio = "1.43.0"

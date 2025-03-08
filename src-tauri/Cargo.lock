@@ -1527,9 +1527,9 @@ dependencies = [
 
 [[package]]
 name = "gtranslate"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c9d617a032c06f1760c8814a1c7774d3b3ceccfd0da5cfc76686f7a769f90815"
+checksum = "cca8e9131f0f611654717930aec95ccd8244ab97fbae57066d63819c5eefa68e"
 dependencies = [
  "reqwest",
  "thiserror 2.0.12",
