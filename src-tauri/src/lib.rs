@@ -1,12 +1,13 @@
 use tauri::{
-    async_runtime, menu::{MenuBuilder, MenuItemBuilder}, path::BaseDirectory, tray::TrayIconBuilder, Emitter, Listener, Manager
+    async_runtime,
+    menu::{MenuBuilder, MenuItemBuilder},
+    path::BaseDirectory,
+    tray::TrayIconBuilder,
+    Emitter, Listener, Manager,
 };
 use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
-use tracing_subscriber::{
-    fmt::time::ChronoLocal,
-    filter::LevelFilter
-};
+use tracing_subscriber::{filter::LevelFilter, fmt::time::ChronoLocal};
 
 #[cfg(desktop)]
 mod models;
@@ -35,63 +36,61 @@ pub fn run() {
                             });
                         }
                     }
-                    
-                };
+                }
             });
 
             // test if our app is opened with required privileges
             // because we need more permissions on some systems to write files in our app sitting within directories requiring higher permissions
-            let test_file = app.path().resolve("test.log", BaseDirectory::Resource).unwrap();
+            let test_file = app
+                .path()
+                .resolve("test.log", BaseDirectory::Resource)
+                .unwrap();
 
             let mut file_opener = tokio::fs::OpenOptions::new();
-            file_opener
-                .read(true)
-                .append(true)
-                .write(true)
-                .create(true);
+            file_opener.read(true).append(true).write(true).create(true);
 
             let test_file_ = test_file.clone();
             let handle = app.handle();
             let exit = async_runtime::block_on(async move {
                 match file_opener.open(test_file_).await {
-                    Ok(_) => {
-                        false
-                    },
+                    Ok(_) => false,
                     Err(err) => {
-                        let window = tauri::WebviewWindowBuilder
-                            ::new(
-                                handle, 
-                                "app-failures",
-                                tauri::WebviewUrl::App("src/failures.html".into())
+                        let window = tauri::WebviewWindowBuilder::new(
+                            handle,
+                            "app-failures",
+                            tauri::WebviewUrl::App("src/failures.html".into()),
                         )
-                            .center()
-                            .closable(false)
-                            .resizable(false)
-                            .decorations(false)
-                            .minimizable(false)
-                            .maximizable(false)
-                            .inner_size(300.0, 200.0)
-                            .visible(false)
-                            .always_on_top(true)
-                            .build()
-                            .unwrap();
-                    
+                        .center()
+                        .closable(false)
+                        .resizable(false)
+                        .decorations(false)
+                        .minimizable(false)
+                        .maximizable(false)
+                        .inner_size(300.0, 200.0)
+                        .visible(false)
+                        .always_on_top(true)
+                        .build()
+                        .unwrap();
+
                         true
-                    },
+                    }
                 }
             });
-            
+
             println!("tokio rm file");
             async_runtime::block_on(async move {
                 tokio::fs::remove_file(test_file).await;
             });
             println!("should be removed");
-            
+
             if exit {
                 return Ok(());
             }
 
-            let log_file = app.path().resolve("app.log", BaseDirectory::Resource).unwrap();
+            let log_file = app
+                .path()
+                .resolve("app.log", BaseDirectory::Resource)
+                .unwrap();
             let tracing = tracing_appender::rolling::never(log_file, "app.log");
 
             tracing_subscriber::fmt()
@@ -126,14 +125,20 @@ pub fn run() {
                         .on_menu_event(|app, event| match event.id.as_ref() {
                             "open" => {
                                 if let Some(window) = app.get_webview_window("main") {
-                                    window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
+                                    window
+                                        .as_ref()
+                                        .window()
+                                        .move_window_constrained(Position::TrayBottomRight);
                                     window.show();
                                     window.set_focus();
-                                    
-                                    app.emit(models::START_GLOW_EFFECT, models::AppPayload{
-                                        identifier: "info",
-                                        message: "start glow effect"
-                                    });
+
+                                    app.emit(
+                                        models::START_GLOW_EFFECT,
+                                        models::AppPayload {
+                                            identifier: "info",
+                                            message: "start glow effect",
+                                        },
+                                    );
                                 }
                             }
                             "quit" => app.exit(0),
@@ -147,15 +152,15 @@ pub fn run() {
             // read app config and deserialize it; some todo's todo
             let app_config = app
                 .path()
-                .resolve("app-conf.json", BaseDirectory::Resource).map_err(|err| {
+                .resolve("app-conf.json", BaseDirectory::Resource)
+                .map_err(|err| {
                     tracing::error!("could not resolve app-conf.json: {}", err);
                     err
                 })?;
-            let file = std::fs::File::open(&app_config)
-                .map_err(|err| {
-                    tracing::error!("failed opening config file: {}", err);
-                    err
-                })?;
+            let file = std::fs::File::open(&app_config).map_err(|err| {
+                tracing::error!("failed opening config file: {}", err);
+                err
+            })?;
 
             let config: tauri_plugin_translator_bindings::AppConfig =
                 serde_json::from_reader(file)?;
