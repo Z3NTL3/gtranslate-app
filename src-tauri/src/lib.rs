@@ -17,32 +17,34 @@ mod models;
 pub fn run() {
     #[allow(unused)]
     tauri::Builder::default()
+        .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
             let handle = app.handle().clone();
-           let _: JoinHandle<tauri_plugin_updater::Result<()>> = async_runtime::spawn(async move {
-                if let Some(update) = handle.updater()?.check().await? {
-                    let mut downloaded = 0;
-        
-                    update
-                        .download_and_install(
-                        |chunk_length, content_length| {
-                            downloaded += chunk_length;
-                            println!("downloaded {downloaded} from {content_length:?}");
-                        },
-                        || {
-                            println!("download finished");
-                        },
-                        )
-                        .await?;
-                
-                    println!("update installed");
-                    handle.restart();
-                }
-                
-                Ok(())
-            });
-           
+            let _: JoinHandle<tauri_plugin_updater::Result<()>> =
+                async_runtime::spawn(async move {
+                    if let Some(update) = handle.updater()?.check().await? {
+                        let mut downloaded = 0;
+
+                        update
+                            .download_and_install(
+                                |chunk_length, content_length| {
+                                    downloaded += chunk_length;
+                                    println!("downloaded {downloaded} from {content_length:?}");
+                                },
+                                || {
+                                    println!("download finished");
+                                },
+                            )
+                            .await?;
+
+                        println!("update installed");
+                        handle.restart();
+                    }
+
+                    Ok(())
+                });
+
             let handle = app.handle().clone();
             app.listen(models::EXIT, move |_| handle.exit(0));
 
