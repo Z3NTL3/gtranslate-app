@@ -1,8 +1,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="README-assets/google-translate.png" alt="Logo" width="80" height="80">
+  <a href="#">
+    <img src="README-assets/showcase.png" alt="Showcase" width="400" >
   </a>
 
   <h3 align="center">GTranslate App</h3>
