@@ -1,6 +1,5 @@
 {
     "timeout": "5",
     "proxy": "",
-    "useProxy": false,
-    "autostart": true
+    "useProxy": false
 }

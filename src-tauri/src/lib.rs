@@ -1,5 +1,5 @@
 use tauri::{
-    async_runtime,
+    async_runtime::{self, JoinHandle},
     menu::{MenuBuilder, MenuItemBuilder},
     path::BaseDirectory,
     tray::TrayIconBuilder,
@@ -7,6 +7,7 @@ use tauri::{
 };
 use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_translator_bindings::TranslatorBindingsExt;
+use tauri_plugin_updater::UpdaterExt;
 use tracing_subscriber::{filter::LevelFilter, fmt::time::ChronoLocal};
 
 #[cfg(desktop)]
@@ -18,6 +19,30 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
+            let handle = app.handle().clone();
+           let _: JoinHandle<tauri_plugin_updater::Result<()>> = async_runtime::spawn(async move {
+                if let Some(update) = handle.updater()?.check().await? {
+                    let mut downloaded = 0;
+        
+                    update
+                        .download_and_install(
+                        |chunk_length, content_length| {
+                            downloaded += chunk_length;
+                            println!("downloaded {downloaded} from {content_length:?}");
+                        },
+                        || {
+                            println!("download finished");
+                        },
+                        )
+                        .await?;
+                
+                    println!("update installed");
+                    handle.restart();
+                }
+                
+                Ok(())
+            });
+           
             let handle = app.handle().clone();
             app.listen(models::EXIT, move |_| handle.exit(0));
 
@@ -202,7 +227,7 @@ pub fn run() {
             }
             Ok(())
         })
-        // .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_translator_bindings::init())
         .run(tauri::generate_context!())
