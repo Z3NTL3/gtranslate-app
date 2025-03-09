@@ -17,7 +17,7 @@ It uses my gtranslate-rs for Google Translations
         <img id="logo" class="glow-anim border-transparent" width="30" src="/src-tauri/icons/glogo.png" alt="logo">
         <div class="flex items-center gap-x-2">
           <h1 class="text-white font-bold text-[18px]">GTranslate</h1>
-          <p class="items-end justify-end h-full font-semibold text-gray-400 font-pop text-[12px] mt-1">v0.1.1</p>
+          <p class="items-end justify-end h-full font-semibold text-gray-400 font-pop text-[12px] mt-1" id="app-version">v.x.x.x</p>
         </div>
         
         <div class="absolute right-1 top-1" onclick="window.__TAURI__.window.getCurrentWindow().hide()">
@@ -288,8 +288,8 @@ It uses my gtranslate-rs for Google Translations
         let b1V = block1.innerText
         let b2V = block2.innerText
 
-        let alt1 = block1_img.getAttribute("alt")
-        let alt2 = block2_img.getAttribute("alt")
+        let alt1 = block1.getAttribute("alt")
+        let alt2 = block2.getAttribute("alt")
 
         let h1 = document.getElementById("block-1-lang-text")
         let h2 = document.getElementById("block-2-lang-text")
