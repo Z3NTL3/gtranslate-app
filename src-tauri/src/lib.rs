@@ -30,15 +30,15 @@ pub fn run() {
                             .download_and_install(
                                 |chunk_length, content_length| {
                                     downloaded += chunk_length;
-                                    println!("downloaded {downloaded} from {content_length:?}");
+                                    tracing::debug!("downloaded {downloaded} from {content_length:?}")
                                 },
                                 || {
-                                    println!("download finished");
+                                    tracing::debug!("download finished")
                                 },
                             )
                             .await?;
 
-                        println!("update installed");
+                            tracing::debug!("update installed");
                         handle.restart();
                     }
 

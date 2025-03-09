@@ -62,7 +62,7 @@ jobs:
         with:
           tagName: GTranslate-app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
           releaseName: 'GTranslate v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
+          releaseBody: ${{ github.event.commits.message}}
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
