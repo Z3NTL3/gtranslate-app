@@ -8,7 +8,7 @@
   <h3 align="center">GTranslate App</h3>
 
   <p align="center">
-    GTranslate is an app available on Windows, MacOS and Linux for translations at the speed of thought
+GTranslate is a comfortable app for translations at the speed of thought, available on all desktop platforms
     <br/>
     <br />
   
