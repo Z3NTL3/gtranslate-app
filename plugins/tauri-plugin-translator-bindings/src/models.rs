@@ -12,6 +12,7 @@ pub struct AppConfig {
   pub proxy: Option<String>,
   #[serde(rename = "useProxy")]
   pub use_proxy: Option<bool>,
+  #[serde(rename = "autoStart")]
   pub autostart: Option<bool>
 }
 
