@@ -24,8 +24,9 @@ pub fn run() {
             // because we need more permissions on some systems to write files in our app sitting within directories requiring higher permissions
             let test_file = app
                 .path()
-                .resolve("test.log", BaseDirectory::Resource)
-                .unwrap();
+                .resource_dir()?;
+
+            test_file.join("test.log");
 
             let mut file_opener = tokio::fs::OpenOptions::new();
             file_opener.read(true).append(true).write(true).create(true);
