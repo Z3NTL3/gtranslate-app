@@ -20,6 +20,22 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
+            let log_file = app
+                .path()
+                .resolve("app.log", BaseDirectory::Resource)
+                .unwrap();
+            let tracing = tracing_appender::rolling::never(log_file, "app.log");
+
+            tracing_subscriber::fmt()
+                .with_writer(tracing)
+                .with_max_level(LevelFilter::DEBUG)
+                .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
+                .with_file(true)
+                .with_line_number(true)
+                .json()
+                .with_current_span(true)
+                .init();
+
             let handle = app.handle().clone();
             let _: JoinHandle<tauri_plugin_updater::Result<()>> =
                 async_runtime::spawn(async move {
@@ -66,69 +82,6 @@ pub fn run() {
                 }
             });
 
-            // test if our app is opened with required privileges
-            // because we need more permissions on some systems to write files in our app sitting within directories requiring higher permissions
-            let test_file = app
-                .path()
-                .resolve("test.log", BaseDirectory::Resource)
-                .unwrap();
-
-            let mut file_opener = tokio::fs::OpenOptions::new();
-            file_opener.read(true).append(true).write(true).create(true);
-
-            let test_file_ = test_file.clone();
-            let handle = app.handle();
-            let exit = async_runtime::block_on(async move {
-                match file_opener.open(test_file_).await {
-                    Ok(_) => false,
-                    Err(err) => {
-                        let window = tauri::WebviewWindowBuilder::new(
-                            handle,
-                            "app-failures",
-                            tauri::WebviewUrl::App("src/failures.html".into()),
-                        )
-                        .center()
-                        .closable(false)
-                        .resizable(false)
-                        .decorations(false)
-                        .minimizable(false)
-                        .maximizable(false)
-                        .inner_size(300.0, 200.0)
-                        .visible(false)
-                        .always_on_top(true)
-                        .build()
-                        .unwrap();
-
-                        true
-                    }
-                }
-            });
-
-            println!("tokio rm file");
-            async_runtime::block_on(async move {
-                tokio::fs::remove_file(test_file).await;
-            });
-            println!("should be removed");
-
-            if exit {
-                return Ok(());
-            }
-
-            let log_file = app
-                .path()
-                .resolve("app.log", BaseDirectory::Resource)
-                .unwrap();
-            let tracing = tracing_appender::rolling::never(log_file, "app.log");
-
-            tracing_subscriber::fmt()
-                .with_writer(tracing)
-                .with_max_level(LevelFilter::DEBUG)
-                .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
-                .with_file(true)
-                .with_line_number(true)
-                .json()
-                .with_current_span(true)
-                .init();
 
             // build and configure system tray stuff in background
             #[cfg(desktop)]
@@ -139,7 +92,11 @@ pub fn run() {
                 let menu = MenuBuilder::new(app)
                     .item(&open_item)
                     .item(&quit_item)
-                    .build()?;
+                    .build()
+                    .map_err(|e| {
+                        tracing::error!("{e}");
+                        e
+                    })?;
 
                 let handle = app.handle().clone();
                 async_runtime::spawn(async move {
@@ -172,6 +129,10 @@ pub fn run() {
                             _ => (),
                         })
                         .build(&handle)
+                        .map_err(|e| {
+                            tracing::error!("{e}");
+                            e
+                        })
                         .unwrap();
                 });
             }
@@ -224,6 +185,10 @@ pub fn run() {
                                 .proxy
                                 .expect("use_proxy is set to `true`, `proxy` must be set as well"),
                         )
+                        .map_err(|e| {
+                            tracing::error!("{e}");
+                            e
+                        })
                         .expect("failed setting proxy");
                 });
             }
