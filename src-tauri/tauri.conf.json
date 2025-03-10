@@ -45,7 +45,6 @@
       "icons/glogo.ico"
     ],
     "resources": {
-      "../src/app.log": "app.log/app.log",
       "../src/assets/app-conf.json": "app-conf.json"
     }, 
     "createUpdaterArtifacts": true
