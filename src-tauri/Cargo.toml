@@ -1,6 +1,6 @@
 [package]
 name = "gtranslate-app"
-version = "0.2.1"
+version = "0.2.2"
 description = "A Tauri App"
 authors = ["z3ntl3"]
 edition = "2021"
@@ -18,7 +18,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = ['tray-icon'] }
+tauri = { version = "2.3.1", features = ['tray-icon'] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
