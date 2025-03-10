@@ -1,6 +1,6 @@
 [package]
 name = "gtranslate-app"
-version = "0.2.3"
+version = "0.2.4"
 description = "A Tauri App"
 authors = ["z3ntl3"]
 edition = "2021"
@@ -26,7 +26,6 @@ tauri-plugin-translator-bindings = { version = "0.1.0", path = "../plugins/tauri
 tokio = { version = "1.43.0", features = ["fs"] }
 thiserror = "2.0.12"
 tracing-subscriber = {version = "0.3.19", features = ["chrono", "json"] }
-tracing-appender = "0.2"
 tracing = "0.1"
 tauri-plugin-clipboard-manager = "2"
 
