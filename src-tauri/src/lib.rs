@@ -85,7 +85,7 @@ pub fn run() {
                         let window = tauri::WebviewWindowBuilder::new(
                             handle,
                             "app-failures",
-                            tauri::WebviewUrl::App("src/failures.html".into()),
+                            tauri::WebviewUrl::App("failures.html".into()),
                         )
                         .center()
                         .closable(false)
