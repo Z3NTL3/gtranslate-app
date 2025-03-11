@@ -65,11 +65,9 @@ pub fn run() {
                 for (label, window) in &handle.webview_windows() {
                     if !label.contains("main") {
                         if let None = window.is_focused().is_ok().then(|| {
-                            println!("window show");
                             window.show();
                         }) {
                             window.is_visible().is_ok().then(|| {
-                                println!("window show");
                                 window.show();
                             });
                         }
@@ -131,21 +129,42 @@ pub fn run() {
                 });
             }
 
-            // read app config and deserialize it; some todo's todo
+            // read app config and deserialize it; but it should not panic
             let app_config = app
                 .path()
                 .resolve("app-conf.json", BaseDirectory::Resource)
                 .map_err(|err| {
                     tracing::error!("could not resolve app-conf.json: {}", err);
                     err
-                })?;
+                });
+
+            if let Err(e) = app_config {
+                tracing::error!("err while trying to read app config: {e}");
+                return Ok(());
+            }  
+
+            let app_config = app_config.unwrap();
+
             let file = std::fs::File::open(&app_config).map_err(|err| {
                 tracing::error!("failed opening config file: {}", err);
                 err
-            })?;
+            });
 
-            let config: tauri_plugin_translator_bindings::AppConfig =
-                serde_json::from_reader(file)?;
+            if let Err(e) = file {
+                tracing::error!("err while opening config file (resource) in read mode: {e}");
+                return Ok(());
+            }
+
+            let file = file.unwrap();
+            let config: Result<tauri_plugin_translator_bindings::AppConfig, serde_json::Error> =
+                serde_json::from_reader(file);
+
+            if let Err(e) = config {
+                tracing::error!("err while opening config file (resource) in read mode: {e}");
+                return Ok(());
+            }
+
+            let config = config.unwrap();
 
             #[cfg(desktop)]
             {
@@ -158,12 +177,13 @@ pub fn run() {
                 ));
 
                 let launch = app.autolaunch();
-                if let Some(_) = config.autostart {
-                    launch.enable();
-                } else {
-                    if launch.is_enabled()? {
+                if let Some(should_enable) = config.autostart {
+                    if !should_enable {
                         launch.disable();
                     }
+                   
+                } else {
+                    launch.enable();
                 }
             }
 
@@ -183,7 +203,6 @@ pub fn run() {
                             tracing::error!("{e}");
                             e
                         })
-                        .expect("failed setting proxy");
                 });
             }
             Ok(())
