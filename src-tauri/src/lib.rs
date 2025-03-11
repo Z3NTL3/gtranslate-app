@@ -22,23 +22,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            let log_file = app
-                .path()
-                .resolve("app.log", BaseDirectory::Resource)
-                .unwrap();
-
-            log_file.join("app.log");
-
-            let opener = OpenOptions::new()
-                .append(true)
-                .open(log_file.clone()).expect("whoops");
-
-            return Ok(());
-
-            let tracing = tracing_appender::rolling::never(log_file, "app.log");
-
             tracing_subscriber::fmt()
-                .with_writer(tracing)
                 .with_max_level(LevelFilter::DEBUG)
                 .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
                 .with_file(true)
@@ -92,7 +76,6 @@ pub fn run() {
                     }
                 }
             });
-
 
             // build and configure system tray stuff in background
             #[cfg(desktop)]
