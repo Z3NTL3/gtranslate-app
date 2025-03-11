@@ -1,5 +1,3 @@
-use std::fs::OpenOptions;
-
 use tauri::{
     async_runtime::{self, JoinHandle},
     menu::{MenuBuilder, MenuItemBuilder},
@@ -17,7 +15,6 @@ mod models;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    #[allow(unused)]
     tauri::Builder::default()
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_positioner::init())
