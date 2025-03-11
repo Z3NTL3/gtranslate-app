@@ -16,8 +16,8 @@ GTranslate is a comfortable app for translations at the speed of thought, availa
 </div>
 
 
-> [!WARNING]  
-> GTranslate is almost fully published and released! We're busy making our product landing website as of now.
+> [!NOTE]  
+> GTranslate will remain in its beta phase until the official release of version ``1.0.0``
 
 # GTranslate
 
