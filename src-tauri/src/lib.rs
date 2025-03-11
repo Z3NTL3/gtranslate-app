@@ -1,3 +1,5 @@
+use std::fs::OpenOptions;
+
 use tauri::{
     async_runtime::{self, JoinHandle},
     menu::{MenuBuilder, MenuItemBuilder},
@@ -24,6 +26,15 @@ pub fn run() {
                 .path()
                 .resolve("app.log", BaseDirectory::Resource)
                 .unwrap();
+
+            log_file.join("app.log");
+
+            let opener = OpenOptions::new()
+                .append(true)
+                .open(log_file.clone()).expect("whoops");
+
+            return Ok(());
+
             let tracing = tracing_appender::rolling::never(log_file, "app.log");
 
             tracing_subscriber::fmt()
