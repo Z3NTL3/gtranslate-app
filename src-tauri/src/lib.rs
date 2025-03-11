@@ -180,6 +180,8 @@ pub fn run() {
                 if let Some(should_enable) = config.autostart {
                     if !should_enable {
                         launch.disable();
+                    } else {
+                        launch.enable();
                     }
                    
                 } else {

@@ -1,6 +1,6 @@
 [package]
 name = "gtranslate-app"
-version = "0.2.6"
+version = "0.2.7"
 description = "A Tauri App"
 authors = ["z3ntl3"]
 edition = "2021"
