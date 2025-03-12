@@ -107,8 +107,8 @@ pub fn run() {
                                             true
                                         },
 
-                                        // macos, linux feature only
-                                        #[cfg(any(macos, linux))]
+                                        // Compability: On Windows/MacOS/Linux one click opens the app directly
+                                        // additionally double click is added for Windows only, as defined above.
                                         tauri::tray::TrayIconEvent::Click { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
