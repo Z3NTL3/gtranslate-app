@@ -1,6 +1,6 @@
 [package]
 name = "gtranslate-app"
-version = "0.2.10"
+version = "0.2.11"
 description = "GTranslate is a comfortable app for translations at the speed of thought, available on all major desktop platforms"
 authors = ["z3ntl3"]
 edition = "2021"
