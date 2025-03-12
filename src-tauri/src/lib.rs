@@ -99,11 +99,20 @@ pub fn run() {
                             let dbl_click: bool = {
                                 if let Some(window) = icon.app_handle().get_webview_window("main") {
                                      match &event {
-                                        tauri::tray::TrayIconEvent::DoubleClick { id, position, rect, button } => {
+                                        //windows only
+                                        tauri::tray::TrayIconEvent::DoubleClick { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
                                             true
                                         },
+
+                                        // macos, linux feature only
+                                        #[cfg(any(macos, linux))]
+                                        tauri::tray::TrayIconEvent::Click { .. } => {
+                                            window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
+                                            window.show();
+                                            true
+                                        }
                                         _ => false,
                                     };
                                     
