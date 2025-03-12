@@ -99,7 +99,8 @@ pub fn run() {
                             let dbl_click: bool = {
                                 if let Some(window) = icon.app_handle().get_webview_window("main") {
                                      match &event {
-                                        //windows only
+                                        // Tauri's DoubleClick is windows only
+                                        #[cfg(windows)]
                                         tauri::tray::TrayIconEvent::DoubleClick { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
