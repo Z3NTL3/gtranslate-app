@@ -93,8 +93,28 @@ pub fn run() {
                     let tray = TrayIconBuilder::new()
                         .icon(handle.default_window_icon().unwrap().clone())
                         .menu(&menu)
+                        .show_menu_on_left_click(false)
                         .on_tray_icon_event(|icon, event| {
-                            tauri_plugin_positioner::on_tray_event(icon.app_handle(), &event);
+                            // add support for feat: open directly on double click in systems tray / app bar
+                            let dbl_click: bool = {
+                                if let Some(window) = icon.app_handle().get_webview_window("main") {
+                                     match &event {
+                                        tauri::tray::TrayIconEvent::DoubleClick { id, position, rect, button } => {
+                                            window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
+                                            window.show();
+                                            true
+                                        },
+                                        _ => false,
+                                    };
+                                    
+                                }
+                                
+                                false
+                            };
+
+                            if !dbl_click {
+                                return tauri_plugin_positioner::on_tray_event(icon.app_handle(), &event);
+                            } 
                         })
                         .on_menu_event(|app, event| match event.id.as_ref() {
                             "open" => {
