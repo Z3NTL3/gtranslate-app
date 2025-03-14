@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="/src/app.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <script type="module" src="/src/main.ts"></script> -->
     <style>
       .dot-anim {
         animation-name: dot-animation;
@@ -29,6 +28,7 @@
       }
 
     </style>
+  </head>
   <body class="bg-[#222222] flex flex-col justify-center items-center w-full h-full">
   <div id="app-version" class="hidden"></div>
   <!-- logo -->
@@ -47,9 +47,7 @@
 
   <script type="module">
     document.addEventListener('contextmenu', event => event.preventDefault());
-    
-    import { listen, emit } from '@tauri-apps/api/event';
-    import { getCurrentWindow } from "@tauri-apps/api/window";
+    import { listen } from '@tauri-apps/api/event';
 
     var progressBar = document.getElementById("progress")
     var size = 0;
@@ -65,10 +63,6 @@
       
       progressBar.style.width = `${(100 / totalSize) * downloaded}%`
     })
-
-    document.onload = () => {
-      emit("window_loaded", {window: getCurrentWindow().label})
-    }
   </script>
   </body>
 </html>
