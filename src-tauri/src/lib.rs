@@ -1,5 +1,3 @@
-use std::fs::OpenOptions;
-
 use tauri::{
     async_runtime::{self, JoinHandle},
     menu::{MenuBuilder, MenuItemBuilder},
@@ -95,8 +93,38 @@ pub fn run() {
                     let tray = TrayIconBuilder::new()
                         .icon(handle.default_window_icon().unwrap().clone())
                         .menu(&menu)
+                        .show_menu_on_left_click(false)
                         .on_tray_icon_event(|icon, event| {
-                            tauri_plugin_positioner::on_tray_event(icon.app_handle(), &event);
+                            // add support for feat: open directly on double click in systems tray / app bar
+                            let dbl_click: bool = {
+                                if let Some(window) = icon.app_handle().get_webview_window("main") {
+                                     match &event {
+                                        // Tauri's DoubleClick is windows only
+                                        #[cfg(windows)]
+                                        tauri::tray::TrayIconEvent::DoubleClick { .. } => {
+                                            window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
+                                            window.show();
+                                            true
+                                        },
+
+                                        // Compability: On Windows/MacOS/Linux one click opens the app directly
+                                        // additionally double click is added for Windows only, as defined above.
+                                        tauri::tray::TrayIconEvent::Click { .. } => {
+                                            window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
+                                            window.show();
+                                            true
+                                        }
+                                        _ => false,
+                                    };
+                                    
+                                }
+                                
+                                false
+                            };
+
+                            if !dbl_click {
+                                return tauri_plugin_positioner::on_tray_event(icon.app_handle(), &event);
+                            } 
                         })
                         .on_menu_event(|app, event| match event.id.as_ref() {
                             "open" => {
