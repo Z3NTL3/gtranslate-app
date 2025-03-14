@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="/src/app.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/src/main.ts"></script>
+    <!-- <script type="module" src="/src/main.ts"></script> -->
     <style>
       .dot-anim {
         animation-name: dot-animation;
@@ -14,7 +14,7 @@
         animation-fill-mode: both;
         animation-iteration-count: infinite;
       }
-      
+
       @keyframes dot-animation {
         from {
           opacity: 0%;
@@ -45,8 +45,30 @@
      <!-- end -->
   </div>
 
-  <script>
+  <script type="module">
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    
+    import { listen, emit } from '@tauri-apps/api/event';
+    import { getCurrentWindow } from "@tauri-apps/api/window";
+
     var progressBar = document.getElementById("progress")
+    var size = 0;
+    listen("update_progress", (event) => {
+      let data = String(event.payload.Message).split("/")
+
+      let downloaded = data[0]
+      let totalSize = data[1]
+
+      if(size === 0) {
+        size = totalSize
+      }
+      
+      progressBar.style.width = `${(100 / totalSize) * downloaded}%`
+    })
+
+    document.onload = () => {
+      emit("window_loaded", {window: getCurrentWindow().label})
+    }
   </script>
   </body>
 </html>
