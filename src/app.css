@@ -246,9 +246,6 @@
   .right-10 {
     right: calc(var(--spacing) * 10);
   }
-  .bottom-3 {
-    bottom: calc(var(--spacing) * 3);
-  }
   .left-10 {
     left: calc(var(--spacing) * 10);
   }
@@ -377,6 +374,14 @@
   }
   .h-8 {
     height: calc(var(--spacing) * 8);
+  .h-5 {
+    height: calc(var(--spacing) * 5);
+  }
+  .h-6 {
+    height: calc(var(--spacing) * 6);
+  }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
   }
   .h-9 {
     height: calc(var(--spacing) * 9);
@@ -440,9 +445,23 @@
   }
   .w-8 {
     width: calc(var(--spacing) * 8);
+  .w-7 {
+    width: calc(var(--spacing) * 7);
   }
-  .w-44 {
-    width: calc(var(--spacing) * 44);
+  .w-\[-10\%\] {
+    width: -10%;
+  }
+  .w-\[0\%\] {
+    width: 0%;
+  }
+  .w-\[1\%\] {
+    width: 1%;
+  }
+  .w-\[2\%\] {
+    width: 2%;
+  }
+  .w-\[10\%\] {
+    width: 10%;
   }
   .w-\[-10\%\] {
     width: -10%;
@@ -560,8 +579,8 @@
   .overflow-auto {
     overflow: auto;
   }
-  .overflow-scroll {
-    overflow: scroll;
+  .rounded {
+    border-radius: 0.25rem;
   }
   .rounded {
     border-radius: 0.25rem;

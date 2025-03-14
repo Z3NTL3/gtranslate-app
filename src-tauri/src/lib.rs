@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use tauri::{
     async_runtime::{self, JoinHandle},
     menu::{MenuBuilder, MenuItemBuilder},
@@ -21,7 +23,7 @@ pub fn run() {
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
             tracing_subscriber::fmt()
-                .with_max_level(LevelFilter::DEBUG)
+                .with_max_level(LevelFilter::ERROR)
                 .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
                 .with_file(true)
                 .with_line_number(true)
@@ -41,41 +43,39 @@ pub fn run() {
                     let window = WebviewWindowBuilder::new(&handle, "updater", tauri::WebviewUrl::App("src/updater.html".into()))
                         .always_on_top(true)
                         .decorations(false)
-                        .devtools(true)
+                        .devtools(false)
                         .inner_size(400 as f64, 400 as f64)
                         .minimizable(false)
                         .maximizable(false)
                         .closable(false)
                         .drag_and_drop(false)
+                        .visible(false)
                         .build()?;
-                  
-                    window.show();
 
                     if let Some(update) = handle.updater()?.check().await? {
                         let mut downloaded = 0;
-                        update  
-                            .download_and_install(
-                                |chunk_length, content_length| {
-                                    downloaded += chunk_length;
+                        let file_contents = update.download(
+                            |chunk_length, content_length| {
+                                downloaded += chunk_length;
 
-                                    handle.emit(models::UPDATE_PROGRESS, models::AppPayload{
-                                        identifier: "update",
-                                        message: &format!("{}/{}", downloaded, content_length.unwrap_or_default())
-                                    });
-                                },
-                                || {
-                                    handle.emit(models::UPDATE_COMPLETED, models::AppPayload{
-                                        identifier: "completed",
-                                        message: "update completed"
-                                    });
-                                },
-                            )
-                            .await?;
-                        
-                        println!("should be updated; restart");
-                        // handle.restart();
+                                handle.emit(models::UPDATE_PROGRESS, models::AppPayload{
+                                    identifier: "update",
+                                    message: &format!("{}/{}", downloaded, content_length.unwrap_or_default())
+                                });
+                            },
+                            || {
+                                handle.emit(models::UPDATE_COMPLETED, models::AppPayload{
+                                    identifier: "completed",
+                                    message: "update completed"
+                                });
+                            },
+                        ).await?;
+                       
+                        tokio::time::sleep(Duration::from_secs(1)).await;
+                        update.install(file_contents)?;
+
+                        handle.restart();
                     }
-
                     Ok(())
                 });
 
@@ -125,7 +125,7 @@ pub fn run() {
                                 if let Some(window) = icon.app_handle().get_webview_window("main") {
                                      match &event {
                                         // Windows only compability
-                                        #[cfg(windows)]
+                                        #[cfg(target_os = "windows")]
                                         tauri::tray::TrayIconEvent::DoubleClick { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
@@ -134,7 +134,7 @@ pub fn run() {
 
                                         // This should only be valid on MacOs and Linux
                                         // On Windows this might have irritated some users when trying to Quit from the system tray
-                                        #[cfg(any(macos, linux))]
+                                        #[cfg(any(target_os = "macos", target_os = "linux"))]
                                         tauri::tray::TrayIconEvent::Click { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
@@ -142,9 +142,7 @@ pub fn run() {
                                         }
                                         _ => false,
                                     };
-                                    
                                 }
-                                
                                 false
                             };
 
