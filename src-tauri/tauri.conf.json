@@ -31,7 +31,22 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "capabilities": [
+        "default",
+        {
+          "identifier": "updater",
+          "description": "Capabilities for the updater window",
+          "windows": ["updater"],
+          "permissions": [
+            "core:event:allow-listen",
+            "core:window:allow-start-dragging",
+            "core:window:allow-destroy",
+            "core:event:allow-emit",
+            "core:window:default"
+          ]
+        }
+      ]
     }
   },
   "bundle": {
