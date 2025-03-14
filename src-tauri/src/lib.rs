@@ -125,15 +125,24 @@ pub fn run() {
                         .menu(&menu)
                         .show_menu_on_left_click(false)
                         .on_tray_icon_event(|icon, event| {
+                            let handle = icon.app_handle();
                             // add support for feat: open directly on double click in systems tray / app bar
                             let dbl_click: bool = {
-                                if let Some(window) = icon.app_handle().get_webview_window("main") {
+                                if let Some(window) = handle.get_webview_window("main") {
                                      match &event {
                                         // Windows only compability
                                         #[cfg(target_os = "windows")]
                                         tauri::tray::TrayIconEvent::DoubleClick { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
+
+                                            handle.emit(
+                                                models::START_GLOW_EFFECT,
+                                                models::AppPayload {
+                                                    identifier: "info",
+                                                    message: "start glow effect",
+                                                },
+                                            );
                                             true
                                         },
 
@@ -143,6 +152,14 @@ pub fn run() {
                                         tauri::tray::TrayIconEvent::Click { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
+
+                                            handle.emit(
+                                                models::START_GLOW_EFFECT,
+                                                models::AppPayload {
+                                                    identifier: "info",
+                                                    message: "start glow effect",
+                                                },
+                                            );
                                             true
                                         }
                                         _ => false,
