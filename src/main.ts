@@ -7,7 +7,7 @@ enum AppEvents {
     WindowLoaded="window_loaded"
 }
 
-document.addEventListener('contextmenu', event => event.preventDefault());
+// document.addEventListener('contextmenu', event => event.preventDefault());
 window.onload = async () => {
     listen(AppEvents.StartGlowEffect, (_) => {
         document.getElementById("logo")?.classList.remove("glow-anim")
