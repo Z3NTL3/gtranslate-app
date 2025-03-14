@@ -31,7 +31,20 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "capabilities": [
+        "default",
+        {
+          "identifier": "updater",
+          "description": "Capabilities for the updater window",
+          "windows": ["updater"],
+          "permissions": [
+            "core:event:allow-listen",
+            "core:window:allow-start-dragging",
+            "core:window:allow-destroy"
+          ]
+        }
+      ]
     }
   },
   "bundle": {
@@ -52,7 +65,7 @@
   "plugins": {
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE1RjIxMEJFODY4MTFEQjEKUldTeEhZR0d2aER5RlRmUW9zdnBTY1ZQdjhIT0JMeWdOS2Y5a0pEZ2xVblA2enpodWVWK2R1Y2sK",
-      "endpoints": ["https://github.com/Z3NTL3/gtranslate-app/releases/latest/download/latest.json"] 
+      "endpoints": ["https://github.com/Z3NTL3/gtranslate-app/releases/download/untagged-7ebbdd268fa7f1125379/latest.json","https://github.com/Z3NTL3/gtranslate-app/releases/latest/download/latest.json"] 
     },
     "windows": {
         "installMode": "passive"

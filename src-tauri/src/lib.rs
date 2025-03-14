@@ -32,23 +32,48 @@ pub fn run() {
             let handle = app.handle().clone();
             let _: JoinHandle<tauri_plugin_updater::Result<()>> =
                 async_runtime::spawn(async move {
+                    // hide main window
+                    handle.get_webview_window("main")
+                        .expect("failed getting main window")
+                        .hide();
+
+                    // create updater window
+                    let window = WebviewWindowBuilder::new(&handle, "updater", tauri::WebviewUrl::App("src/updater.html".into()))
+                        .always_on_top(true)
+                        .decorations(false)
+                        .devtools(true)
+                        .inner_size(400 as f64, 400 as f64)
+                        .minimizable(false)
+                        .maximizable(false)
+                        .closable(false)
+                        .drag_and_drop(false)
+                        .build()?;
+                  
+                    window.show();
+
                     if let Some(update) = handle.updater()?.check().await? {
                         let mut downloaded = 0;
-
-                        update
+                        update  
                             .download_and_install(
                                 |chunk_length, content_length| {
                                     downloaded += chunk_length;
-                                    tracing::debug!("downloaded {downloaded} from {content_length:?}")
+
+                                    handle.emit(models::UPDATE_PROGRESS, models::AppPayload{
+                                        identifier: "update",
+                                        message: &format!("{}/{}", downloaded, content_length.unwrap_or_default())
+                                    });
                                 },
                                 || {
-                                    tracing::debug!("download finished")
+                                    handle.emit(models::UPDATE_COMPLETED, models::AppPayload{
+                                        identifier: "completed",
+                                        message: "update completed"
+                                    });
                                 },
                             )
                             .await?;
-
-                            tracing::debug!("update installed");
-                        handle.restart();
+                        
+                        println!("should be updated; restart");
+                        // handle.restart();
                     }
 
                     Ok(())
@@ -99,7 +124,7 @@ pub fn run() {
                             let dbl_click: bool = {
                                 if let Some(window) = icon.app_handle().get_webview_window("main") {
                                      match &event {
-                                        // Tauri's DoubleClick is windows only
+                                        // Windows only compability
                                         #[cfg(windows)]
                                         tauri::tray::TrayIconEvent::DoubleClick { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
@@ -107,8 +132,9 @@ pub fn run() {
                                             true
                                         },
 
-                                        // Compability: On Windows/MacOS/Linux one click opens the app directly
-                                        // additionally double click is added for Windows only, as defined above.
+                                        // This should only be valid on MacOs and Linux
+                                        // On Windows this might have irritated some users when trying to Quit from the system tray
+                                        #[cfg(any(macos, linux))]
                                         tauri::tray::TrayIconEvent::Click { .. } => {
                                             window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
