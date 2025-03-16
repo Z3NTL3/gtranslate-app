@@ -18,14 +18,49 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
-            tracing_subscriber::fmt()
-                .with_max_level(LevelFilter::ERROR)
-                .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
-                .with_file(true)
-                .with_line_number(true)
-                .json()
-                .with_current_span(true)
-                .init();
+            #[cfg(desktop)]
+            {
+                // setup tracing logger
+                let resources_dir = app
+                    .path()
+                    .resource_dir();
+
+                let mut did_fail = false;
+                if let Ok(mut dir) = resources_dir {
+                    let log_writer = tracing_appender::rolling::never(dir, "app.log");
+                    let logger = tracing_subscriber::fmt()
+                        .with_writer(log_writer)
+                        .with_max_level(LevelFilter::ERROR)
+                        .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
+                        .with_file(true)
+                        .with_line_number(true)
+                        .json()
+                        .with_current_span(true)
+                        .try_init();
+
+
+                    if logger.is_err() {
+                        did_fail = true;
+                        println!("could not initialize file logger")
+                    }
+                } else {
+                    did_fail = true;
+                }
+
+                if did_fail {
+                    if tracing_subscriber::fmt()
+                        .with_max_level(LevelFilter::ERROR)
+                        .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
+                        .with_file(true)
+                        .with_line_number(true)
+                        .json()
+                        .with_current_span(true)
+                        .try_init()
+                        .is_err() {
+                            println!("failed initializating stdout logger")
+                        }
+                } 
+            }
 
             // setup some important handlers
             let handle = app.handle().clone();
@@ -49,7 +84,6 @@ pub fn run() {
     
             // self-updater
             let handle = app.handle().clone();
-           
             let _: JoinHandle<tauri_plugin_updater::Result<()>> = async_runtime::spawn(async move {
                 if let Some(update) = handle.updater()?.check().await? {
                     println!("update found");
