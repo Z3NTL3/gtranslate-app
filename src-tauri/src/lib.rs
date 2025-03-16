@@ -50,6 +50,8 @@ pub fn run() {
             // self-updater
             let handle = app.handle().clone();
            
+           // in the upcoming v0.3.2 patch we'll use channels instead of depending on Tauri's event system
+           // as channels provide better and faster streamlines
             let _: JoinHandle<tauri_plugin_updater::Result<()>> = async_runtime::spawn(async move {
                 if let Some(update) = handle.updater()?.check().await? {
                     println!("update found");
