@@ -11,6 +11,8 @@ use tracing_subscriber::{filter::LevelFilter, fmt::time::ChronoLocal};
 #[cfg(desktop)]
 mod models;
 
+pub mod commands;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     #[allow(unused)]
@@ -18,6 +20,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_positioner::init())
         .setup(|mut app| {
+            // better tokio tracing support coming on patch v3.2.0
             tracing_subscriber::fmt()
                 .with_max_level(LevelFilter::ERROR)
                 .with_timer(ChronoLocal::new("%v - %H:%M:%S".to_owned()))
@@ -33,23 +36,15 @@ pub fn run() {
 
             let handle = app.handle().clone();
             app.listen(models::WINDOW_LOADED, move |event| {
-                println!("event: {}", event.payload());
                 for (label, window) in &handle.webview_windows() {
                     if !label.contains("main") {
-                        if let None = window.is_focused().is_ok().then(|| {
-                            window.show();
-                        }) {
-                            window.is_visible().is_ok().then(|| {
-                                window.show();
-                            });
-                        }
+                        window.show();
                     }
                 }
             });
     
             // self-updater
             let handle = app.handle().clone();
-           
             let _: JoinHandle<tauri_plugin_updater::Result<()>> = async_runtime::spawn(async move {
                 if let Some(update) = handle.updater()?.check().await? {
                     println!("update found");
@@ -69,9 +64,6 @@ pub fn run() {
                         .build()?;
 
                     window.hide();
-
-                    tokio::time::sleep(Duration::from_secs(4)).await; // sleep
-                    window.show();
 
                     // hide main window
                     handle.get_webview_window("main")

@@ -46,11 +46,13 @@
   </div>
 
   <script type="module">
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    import { listen } from '@tauri-apps/api/event';
+    import { listen, emit } from '@tauri-apps/api/event';
+    import { getCurrentWindow } from "@tauri-apps/api/window";
 
     var progressBar = document.getElementById("progress")
     var size = 0;
+
+    emit("window_loaded", {window: getCurrentWindow().label})
     listen("update_progress", (event) => {
       let data = String(event.payload.Message).split("/")
 
@@ -63,6 +65,8 @@
       
       progressBar.style.width = `${(100 / totalSize) * downloaded}%`
     })
+
+    document.addEventListener('contextmenu', event => event.preventDefault());
   </script>
   </body>
 </html>
