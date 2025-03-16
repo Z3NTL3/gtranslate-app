@@ -60,7 +60,8 @@
       "icons/glogo.ico"
     ],
     "resources": {
-      "../src/assets/app-conf.json": "app-conf.json"
+      "../src/assets/app-conf.json": "app-conf.json",
+      "../src/app.log": "app.log"
     }, 
     "createUpdaterArtifacts": true
   },
