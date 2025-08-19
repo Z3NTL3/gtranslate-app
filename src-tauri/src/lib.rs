@@ -125,7 +125,7 @@ pub fn run() {
                                         // Windows only compability
                                         #[cfg(target_os = "windows")]
                                         tauri::tray::TrayIconEvent::DoubleClick { .. } => {
-                                            window.as_ref().window().move_window_constrained(Position::TrayRight);
+                                            window.as_ref().window().move_window_constrained(Position::TopRight);
                                             window.show();
 
                                             handle.emit(
@@ -142,7 +142,7 @@ pub fn run() {
                                         // On Windows this might have irritated some users when trying to Quit from the system tray
                                         #[cfg(any(target_os = "macos", target_os = "linux"))]
                                         tauri::tray::TrayIconEvent::Click { .. } => {
-                                            window.as_ref().window().move_window_constrained(Position::TrayRight);
+                                            window.as_ref().window().move_window_constrained(Position::TopRight);
                                             window.show();
 
                                             handle.emit(
@@ -170,7 +170,7 @@ pub fn run() {
                                     window
                                         .as_ref()
                                         .window()
-                                        .move_window_constrained(Position::Center);
+                                        .move_window_constrained(Position::TopRight);
                                     window.show();
                                     window.set_focus();
 
