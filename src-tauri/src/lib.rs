@@ -125,7 +125,7 @@ pub fn run() {
                                         // Windows only compability
                                         #[cfg(target_os = "windows")]
                                         tauri::tray::TrayIconEvent::DoubleClick { .. } => {
-                                            window.as_ref().window().move_window_constrained(Position::TopRight);
+                                            window.as_ref().window().move_window_constrained(Position::TrayBottomRight);
                                             window.show();
 
                                             handle.emit(
